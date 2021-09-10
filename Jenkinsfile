@@ -1,100 +1,90 @@
-node {    
+def buildNumber = "${env.BUILD_NUMBER}"
+node {
 
-      def app     
-      def appName='devops-demo-web-app'
-      def snapName=''
-      def deployableName = 'PROD-US'
-      def setYamlUpload = true
-      
-      // Json Example
-      def configFilePath = "paymentService"
-      def exportFormat ='json'
+       def appName='devops-demo-web-app'
+       def snapName=''
+       def deployableName = 'PROD-US'
+       def setYamlUpload = true
 
-      // Yaml Example
-      if(setYamlUpload){
-            exportFormat ='yaml'
-            configFilePath = "k8s/helm/values"
-      }
+       // Json Example
+       def configFilePath = "paymentService"
+       def exportFormat ='json'
 
-      def fileNamePrefix ='exported_file_'
-      def fullFileName="${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
-      def changeSetId=""
-      def componentName="web-app-v1.1"
-      def collectionName="release-1.0"
-      def snapshotName=""
-      def exporterName ='k8s-exporter' 
-      def exporterArgs = '{"component": "' + componentName + '", "collection": "' + collectionName + '", "deployable": "' + deployableName + '"}'
-      def dockerImageName = "santoshnrao/web-app"
-      def dockerImageTag=""
+       // Yaml Example
+       if(setYamlUpload){
+             exportFormat ='yaml'
+             configFilePath = "k8s/helm/values"
+       }
 
-      stage('Build image') {      
-            
-            checkout scm    
-            echo "scm checkout successful"
-            
-       }     
-      stage('Test') {           
-                      
-             sh 'echo "Tests passed"'        
-                
-        }     
-      
-       stage('Push docker Image') { 
-            sh 'ls -a'
+       def fileNamePrefix ='exported_file_'
+       def fullFileName="${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
+       def changeSetId=""
+       def componentName="devops-config-demo-web-app-v1.1"
+       def collectionName="release-1.0"
+       def snapshotName=""
+       def exporterName ='k8s-exporter'
+       def exporterArgs = '{"component": "' + componentName + '", "collection": "' + collectionName + '", "deployable": "' + deployableName + '"}'
+       def dockerImageName = "sannrao/web-api"
+       def dockerImageTag=""
 
-            dockerImageTag = env.BUILD_NUMBER
-            dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
-      
+      // agent any
+      // tools {
+      //       maven 'maven'
+      // }
+      stage("Checkout and build"){
 
-            snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
-            echo " docker Image artifacat ${dockerImageNameTag} "
-            echo "snDevopsArtifactPayload ${snDevopsArtifactPayload} "
-            
-            snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
-
+                  // snDevOpsStep()
+            checkout scm
+            // sh 'mvn clean install'
       }
       
+      stage("Tests") {
+            // agent any
+            // sh 'mvn clean verify'
+
+      }
+
       stage('Upload Configuration Files'){
-            
+
 
             sh "echo validating configuration file ${configFilePath}.${exportFormat}"
             changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", fileName:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
 
             echo "validation result $changeSetId"
-            
-              echo "Change set registration for ${changeSetId}"
-              changeSetRegResult = snDevOpsConfigRegisterChangeSet(changesetId:"${changeSetId}")
-              echo "change set registration set result ${changeSetRegResult}"
-            
+
+            echo "Change set registration for ${changeSetId}"
+            changeSetRegResult = snDevOpsConfigRegisterChangeSet(changesetId:"${changeSetId}")
+            echo "change set registration set result ${changeSetRegResult}"
+
       }
 
 
-    stage("Get snapshot status"){
-          
-        echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
+      stage("Get snapshot status"){
 
-        changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}",changeSetId:"${changeSetId}")
-        echo "ChangeSet Result : ${changeSetResults}"
-        
-        def changeSetResultsObject = readJSON text: changeSetResults
-        
-          changeSetResultsObject.each {
+            echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
 
-                if(it.validation == "passed"){
-                      echo "validation passed for snapshot : ${it.name}"
-                      snapshotName = it.name
-                }else{
-                      echo "Snapshot failed to get validated : ${it.name}" ;
-                      assert it.validation == "passed"
-                }
-            
-          }
-          if (!snapshotName?.trim()){
-                error "No valid snapshot found to proceed" ;
-          }
-          echo "Snapshot Name : ${snapshotName} "                
-          
-    }
+            changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}",changeSetId:"${changeSetId}")
+            echo "ChangeSet Result : ${changeSetResults}"
+
+            def changeSetResultsObject = readJSON text: changeSetResults
+
+            changeSetResultsObject.each {
+
+                  if(it.validation == "passed"){
+                        echo "validation passed for snapshot : ${it.name}"
+                        snapshotName = it.name
+                  }else{
+                        echo "Snapshot failed to get validated : ${it.name}" ;
+                        assert it.validation == "passed"
+                  }
+
+            }
+            if (!snapshotName?.trim()){
+                  error "No valid snapshot found to proceed" ;
+            }
+            echo "Snapshot Name : ${snapshotName} "
+
+      }
 
       stage('Publish the snapshot'){
             echo "Step to publish snapshot applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName}"
@@ -113,25 +103,9 @@ node {
             response = snDevOpsConfigExport(applicationName: "${appName}", snapshotName: "${snapName}", deployableName: "${deployableName}",exporterFormat: "${exportFormat}", fileName:"${fullFileName}", exporterName: "${exporterName}", exporterArgs: "${exporterArgs}")
             echo " RESPONSE FROM EXPORT : ${response}"
 
-        }
-      
-      stage("Deploy to PROD-US"){
-            
-            echo "Reading config from file name ${fullFileName}"
-            echo " ++++++++++++ BEGIN OF File Content ***************"
-            sh "cat ${fullFileName}"
-            echo " ++++++++++++ END OF File content ***************"
-            
-            echo "deploy finished successfully."
-
-            
-            echo "********************** BEGIN Deployment ****************"
-            echo "Applying docker image ${dockerImageNameTag}"
-
-      
-            echo "********************** END Deployment ****************"
-
-            
       }
-
+      stage('Deploy'){
+            snDevOpsChange()
+            echo "Started Deploying"
+      }
 }
