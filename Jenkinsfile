@@ -106,9 +106,6 @@ node {
                         "cmdb_ci": {
                             "name": "Servers - PaymentDemo - Prod-US"
                         },
-                        "business_service": {
-                            "name": "PaymentDemo - PROD-US"
-                        },
                         "start_date": "2021-09-20 00:00:00",
                         "end_date": "2021-09-20 02:00:00"
                   }
