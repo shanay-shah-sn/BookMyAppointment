@@ -102,15 +102,13 @@ node {
                   "setCloseCode": false,
                   "attributes": {
                         "category": "DevOps",
-                        "priority": "2",
+                        "priority": "3",
                         "cmdb_ci": {
                             "name": "Servers - PaymentDemo - Prod-US"
                         },
                         "business_service": {
                             "name": "PaymentDemo - PROD-US"
-                        },
-                        "start_date": "2021-09-20 00:00:00",
-                        "end_date": "2021-09-20 02:00:00"
+                        }
                   }
             }""")
 
