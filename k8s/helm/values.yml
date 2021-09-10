@@ -1,8 +1,8 @@
 replicaCount: "2"
 
 mongo:
-  dbport : "27018"
-  dbUrl: "https://awesome.uswest1.training-studio..mongodb"
+  dbport : "27017"
+  dbUrl: "https://awesome.uswest1.training-studio.mongodb"
   dbUserName : "@@dbUserName@@"
   dbPassword : "@@dbPassword@@"
 
