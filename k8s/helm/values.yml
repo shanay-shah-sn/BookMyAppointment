@@ -42,7 +42,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 8080
+  port: "8080"
   
 routing:
   enabled: true 
@@ -76,10 +76,10 @@ resources:
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  minReplicas: "1"
+  maxReplicas: "10"
+  targetCPUUtilizationPercentage: "80"
+  # targetMemoryUtilizationPercentage: "80"
 
 nodeSelector: {}
 
