@@ -22,7 +22,8 @@ node {
        def componentName="paymentService-v1.1"
        def collectionName="release-1.0"
        def snapshotName=""
-       def exporterName ='k8s-exporter'
+//       def exporterName ='k8s-exporter'
+       def exporterName ='returnAllData'
        def exporterArgs = '{"component": "' + componentName + '", "collection": "' + collectionName + '", "deployable": "' + deployableName + '"}'
        def dockerImageName = "sannrao/web-api"
        def dockerImageTag=""
