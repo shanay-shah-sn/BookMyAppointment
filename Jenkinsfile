@@ -1,7 +1,7 @@
 def buildNumber = "${env.BUILD_NUMBER}"
 node {
 
-       def appName='devops-demo-web-app'
+       def appName='PaymentDemo'
        def snapName=''
        def deployableName = 'PROD-US'
        def setYamlUpload = true
