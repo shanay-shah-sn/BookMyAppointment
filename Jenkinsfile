@@ -322,8 +322,8 @@ pipeline {
                   steps{
                         script{
                               echo "Devops Change trigger change request"
-//                              snDevOpsChange()
-                              snDevOpsChange(changeRequestDetails: """{
+                              snDevOpsChange()
+/*                              snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
                                     "attributes": {
                                           "category": "DevOps",
@@ -335,7 +335,7 @@ pipeline {
                                               "name": "PaymentDemo_Production_1"
                                           }
                                     }
-                              }""")
+                              }""")*/
 
                               echo "Exporting for App: ${appName} Deployable; ${deployableName} Exporter name ${exporterName} "
                               echo "Configfile exporter file name ${fullFileName}"
