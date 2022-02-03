@@ -152,7 +152,7 @@ pipeline {
                         script {
 //                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
                               changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'false',autoValidate:'false',dataFormat:"${exportFormat}")
-                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:'k8s/helm/*.json', autoCommit:'true',autoValidate:'true',dataFormat:'json',changesetNumber:"${changeSetId}")
+                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:'k8s/helm/keka_test/*.json', autoCommit:'true',autoValidate:'true',dataFormat:'json',changesetNumber:"${changeSetId}")
 
                               echo "validation result $changeSetId"
 
