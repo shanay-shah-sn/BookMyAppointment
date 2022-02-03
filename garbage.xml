@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testsuites failures="1" tests="1">
+<testsuites failures="3" tests="1">
   <testsuite name="keka-test-app/Test-v8.dpl">
     <testcase decision="non_compliant" name="noClearSensitiveData">
       <failure message="{&quot;impacted_node.name&quot;:&quot;noClearSensitiveData-password-KO1&quot;,&quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-password-KO1&quot;}">value of noClearSensitiveData-password-KO1 is not encrypted</failure>
