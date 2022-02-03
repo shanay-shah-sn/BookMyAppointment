@@ -145,16 +145,18 @@ pipeline {
 
             }
             
-            stage('Upload Configuration Files'){
+            stage('Upload Configuration Files') {
                   
-                  steps{
+                  steps {
                         sh "echo validating configuration file ${configFilePath}"
-                        script{
-                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
+                        script {
+//                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
+                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'false',autoValidate:'false',dataFormat:"${exportFormat}")
+                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:'k8s/helm/*.json', autoCommit:'true',autoValidate:'true',dataFormat:'json',changesetNumber:"${changeSetId}")
 
                               echo "validation result $changeSetId"
 
-                              if(changeSetId != null){
+                              if(changeSetId != null) {
 
                                     echo "Change set registration for ${changeSetId}"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
