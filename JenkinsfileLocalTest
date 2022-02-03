@@ -123,7 +123,7 @@ pipeline {
           always{
                  echo ">>>>>Displaying post info"
 //                 junit '**/*.xml'
-                junit 'debug_junit.xml'
+                junit 'garbage.xml'
           }
       }
 
