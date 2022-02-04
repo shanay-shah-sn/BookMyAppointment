@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
-  <testsuite name="keka-test-app/Test-v8.dpl" time="15.03" tests="3" failures="1">
+  <testsuite name="DevOps Config.Config Validations" time="15.03" tests="3" failures="1">
     <testcase decision="non_compliant" className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData" time="5.00">
       <failure message="value of noClearSensitiveData-password-KO1 is not encrypted">
 {
@@ -17,7 +17,7 @@
 }
       </failure>
     </testcase>
-    <testcase className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData3" time="5.03">      
+    <testcase name="noClearSensitiveData3" time="5.03">      
       <failure message="value of noClearSensitiveData-pwd-KO2 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-pwd-KO2&quot;,
