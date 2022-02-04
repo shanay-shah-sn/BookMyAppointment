@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
-  <testsuite name="DevOps Config Policy Validation - Application: keka-test-app, Deployable: Test-v8.dpl" time="15.03" tests="2" failures="1">
+  <testsuite name="DevOps Config" time="15.03" tests="2" failures="1">
     <testcase decision="non_compliant" name="noClearSensitiveData" className="Validate Configs">
       <failure message="{&quot;impacted_node.name&quot;:&quot;noClearSensitiveData-password-KO1&quot;,&quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-password-KO1&quot;}">value of noClearSensitiveData-password-KO1 is not encrypted</failure>
       <failure message="{&quot;impacted_node.name&quot;:&quot;noClearSensitiveData-secret-KO3&quot;,&quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-secret-KO3&quot;}">value of noClearSensitiveData-secret-KO3 is not encrypted</failure>
     </testcase>
     <testcase decision="compliant" name="noClearSensitiveData">      
       <failure message="value of noClearSensitiveData-pwd-KO2 is not encrypted">
-        {
-          &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-pwd-KO2&quot;,
-          &quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-pwd-KO2&quot;
-        }
+{
+  &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-pwd-KO2&quot;,
+  &quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-pwd-KO2&quot;
+}
       </failure>
     </testcase>
   </testsuite>
