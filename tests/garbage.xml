@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
-  <testsuite name="DevOps Config" package="DevOps Confi2" className="BIGfoo" time="15.03" tests="2" failures="1">
+  <testsuite name="DevOpsConfig" time="15.03" tests="2" failures="1">
     <testcase decision="non_compliant" className="foo.bar" name="noClearSensitiveData" time="5.00">
       <failure message="value of noClearSensitiveData-password-KO1 is not encrypted">
 {
