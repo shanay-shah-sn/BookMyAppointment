@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
   <testsuite name="DevOps Config" time="15.03" tests="2" failures="1">
-    <testcase decision="non_compliant" name="noClearSensitiveData" className="Validate Configs">
+    <testcase decision="non_compliant" name="noClearSensitiveData" time="5.00">
       <failure message="value of noClearSensitiveData-password-KO1 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-password-KO1&quot;,
@@ -9,7 +9,7 @@
 }
       </failure>
     </testcase>
-    <testcase name="noClearSensitiveData" className="Validate Configs">
+    <testcase name="noClearSensitiveData" time="5.00">
       <failure message="value of noClearSensitiveData-secret-KO3 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-secret-KO3&quot;,
@@ -17,7 +17,7 @@
 }
       </failure>
     </testcase>
-    <testcase name="noClearSensitiveData">      
+    <testcase name="noClearSensitiveData" time="5.03">      
       <failure message="value of noClearSensitiveData-pwd-KO2 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-pwd-KO2&quot;,
