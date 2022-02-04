@@ -376,9 +376,7 @@ pipeline {
       post{
           always{
                  echo ">>>>>Displaying Test results"
-//                 junit '**/*.xml'
-                junit 'debug_junit.xml'
+                 junit '**/*.xml'
           }
       }
-
 }
