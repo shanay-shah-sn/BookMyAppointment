@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
   <testsuite name="DevOps Config.Config Validations" time="15.03" tests="3" failures="1">
-    <testcase decision="non_compliant" className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData" time="5.00">
-      <failure message="value of noClearSensitiveData-password-KO1 is not encrypted">
+    <testcase decision="non_compliant" className="DevOps Config.Config Validations" name="noClearSensitiveData" time="5.00">
+      <failure message="value of noClearSensitiveData-password-KO1 is not encrypted" name="Validate Config">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-password-KO1&quot;,
   &quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/testData.json/testNoClearSensitiveData/noClearSensitiveData-password-KO1&quot;
