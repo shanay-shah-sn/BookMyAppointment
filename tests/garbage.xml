@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <testsuites>
   <testsuite name="keka-test-app/Test-v8.dpl" time="15.03" tests="3" failures="1">
-    <testcase decision="non_compliant" className="foo.bar" name="noClearSensitiveData" time="5.00">
+    <testcase decision="non_compliant" className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData" time="5.00">
       <failure message="value of noClearSensitiveData-password-KO1 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-password-KO1&quot;,
@@ -9,7 +9,7 @@
 }
       </failure>
     </testcase>
-    <testcase className="foo.bar" name="noClearSensitiveData2" time="5.00">
+    <testcase className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData2" time="5.00">
       <failure message="value of noClearSensitiveData-secret-KO3 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-secret-KO3&quot;,
@@ -17,7 +17,7 @@
 }
       </failure>
     </testcase>
-    <testcase className="foo.lish" name="noClearSensitiveData3" time="5.03">      
+    <testcase className="keka-test-app/Test-v8.dpl" name="noClearSensitiveData3" time="5.03">      
       <failure message="value of noClearSensitiveData-pwd-KO2 is not encrypted">
 {
   &quot;impacted_node.name&quot;:&quot;noClearSensitiveData-pwd-KO2&quot;,
@@ -25,5 +25,9 @@
 }
       </failure>
     </testcase>
+    <testcase decision="non_compliant" name="unresolvedVariables">
+      <failure message="{&quot;impacted_node.name&quot;:&quot;dbUserName&quot;,&quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/values.yml/mongo/dbUserName&quot;} | {&quot;impacted_node.name&quot;:&quot;dbPassword&quot;,&quot;node_path&quot;:&quot;/keka-test-app/deployables/Test/release-1.0/testData/values.yml/mongo/dbPassword&quot;} | ">unresolved variable detected for dbUserName | @@dbUserName@@| unresolved variable detected for dbPassword | @@dbPassword@@| </failure>
+    </testcase>
+    <testcase decision="compliant" name="noHTTP"/>
   </testsuite>
 </testsuites>
