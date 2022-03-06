@@ -28,60 +28,60 @@ pipeline {
                               /**
                               * DevOps Config App related information
                               */
-                              appName='PaymentDemo'
+                              appName = 'PaymentDemo'
                               deployableName = 'Production'
-                              componentName="web-api-v1.0"
-                              collectionName="release-1.0"
+                              componentName = "web-api-v1.0"
+                              collectionName = "release-1.0"
                               /**
                               * Configuration File information to be uploaded
                               */ 
-                              exportFormat ='yaml'
+                              exportFormat = 'yaml'
                               configFilePath = "k8s/helm/values.yml"
                               /**
                               * Devops Config exporter related information
                               */
-                              exporterName ='returnAllData-nowPreview' 
+                              exporterName = 'returnAllData-nowPreview' 
                               exporterArgs = ''
                               /**
                               * Jenkins variables declared to be used in pipeline
                               */
-                              fileNamePrefix ='exported_file_'
-                              fullFileName="${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
-                              changeSetId=""
-                              dockerImageTag=""
-                              snapshotName=""
-                              snapshotObject=""
-                              isSnapshotCreated=false
-                              isSnapshotValidateionRequired=false
-                              isSnapshotPublisingRequired=false
+                              fileNamePrefix = 'exported_file_'
+                              fullFileName = "${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
+                              changeSetId = ""
+                              dockerImageTag = ""
+                              snapshotName = ""
+                              snapshotObject = ""
+                              isSnapshotCreated = false
+                              isSnapshotValidateionRequired = false
+                              isSnapshotPublisingRequired = false
 
                               /**
                               * Checking for parameters
                               */
-                              if(params){
+                              if(params) {
                                     echo "setting values from build parameter"
-                                    if(params.appName){
+                                    if(params.appName) {
                                           appName = params.appName;
                                     }
-                                    if(params.deployableName){
+                                    if(params.deployableName) {
                                           deployableName = params.deployableName
                                     }
-                                    if(params.componentName){
+                                    if(params.componentName) {
                                           componentName = params.componentName
                                     }
-                                    if(params.collectionName){
+                                    if(params.collectionName) {
                                           collectionName = params.collectionName
                                     }
-                                    if(params.exportFormat){
+                                    if(params.exportFormat) {
                                           exportFormat = params.exportFormat
                                     }
-                                    if(params.configFilePath){
+                                    if(params.configFilePath) {
                                           configFilePath = params.configFilePath
                                     }
-                                    if(params.exporterName){
-                                          exporterName =params.exporterName
+                                    if(params.exporterName) {
+                                          exporterName = params.exporterName
                                     }
-                                    if(params.exporterArgs){
+                                    if(params.exporterArgs) {
                                           exporterArgs = params.exporterArgs
                                     }
                               }
