@@ -3,78 +3,61 @@
 * Use the same variable name to set the build parameters.
 * List of parameters that can be passed
 * appName='devops-demo-web-app'
-* deployableName = 'Prod-US'
+* deployableName = 'PROD-US'
 * componentName="web-app-v1.1"
 * collectionName="release-1.0"
 * exportFormat ='yaml'
 * configFilePath = "k8s/helm/values.yml"
-* exporterName ='returnAllData' 
+* exporterName ='returnAllData-nowPreview' 
 * exporterArgs = ''
 */
 
 pipeline {    
 
-      
       agent any
       /**
       * Jenkins pipline related variables
       */
-      
-
-
-      
-      stages{
-
-            stage('Initialize'){
-                  steps{
-                        script{
+      stages {
+            stage('Initialize') {
+                  steps {
+                        script {
                         
-                              dockerImageName = "santoshnrao/web-app"
-
+                              dockerImageName = "kekaichinose/web-app"
 
                               /**
                               * DevOps Config App related information
                               */
                               appName='PaymentDemo'
-                              deployableName = 'Prod-US'
-                              componentName="paymentService-v1.1"
+                              deployableName = 'Production'
+                              componentName="web-api-v1.0"
                               collectionName="release-1.0"
-                              
                               /**
-                              * Configuration File information to be uploade
+                              * Configuration File information to be uploaded
                               */ 
-                              
                               exportFormat ='yaml'
-                              configFilePath = "k8s/demo-training-studio/values.yml"
-
+                              configFilePath = "k8s/helm/values.yml"
                               /**
                               * Devops Config exporter related information
                               */
-                              
                               exporterName ='returnAllData-nowPreview' 
                               exporterArgs = ''
-                              
                               /**
                               * Jenkins variables declared to be used in pipeline
-                              */ 
-
+                              */
                               fileNamePrefix ='exported_file_'
                               fullFileName="${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
                               changeSetId=""
-                              snapshotName=""
-                              
                               dockerImageTag=""
-                              snapName=''
+                              snapshotName=""
                               snapshotObject=""
                               isSnapshotCreated=false
                               isSnapshotValidateionRequired=false
                               isSnapshotPublisingRequired=false
 
-
                               /**
                               * Checking for parameters
                               */
-
                               if(params){
                                     echo "setting values from build parameter"
                                     if(params.appName){
@@ -100,130 +83,103 @@ pipeline {
                                     }
                                     if(params.exporterArgs){
                                           exporterArgs = params.exporterArgs
-                                    } 
-
+                                    }
                               }
-
                         }
                   }
             }
             
             // Build Step
             stage('Build image') {      
-                  steps{
-                  checkout scm    
-                  echo "scm checkout successful"
+                  steps {
+                        checkout scm    
+                        echo "scm checkout successful"
                   }
-                  
-            }     
+            }
+            // Test Step (simulate)
             stage('Test') {           
-                  steps{         
-                  sh 'echo "Tests passed"'        
+                  steps {         
+                        sh 'echo "Tests passed"'        
                   }
-                  
             }     
             
             // Generate an Artifact
             stage('Push docker Image') { 
-                  steps{
-                  sh 'ls -a'
-                  script{
+                  steps {
+                        sh 'ls -a'
+                        script {
+                              dockerImageTag = env.BUILD_NUMBER
+                              dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
 
-                  
-                  dockerImageTag = env.BUILD_NUMBER
-                  dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
-            
+                              snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
+                              echo " docker Image artifacat ${dockerImageNameTag} "
+                              echo "snDevopsArtifactPayload ${snDevopsArtifactPayload} "
 
-                  snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
-                  echo " docker Image artifacat ${dockerImageNameTag} "
-                  echo "snDevopsArtifactPayload ${snDevopsArtifactPayload} "
-                  
-                  snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
+                              snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
+                        }
                   }
-
-                  }
-
             }
             
-            stage('Upload Configuration Files') {
-                  
+            // Upload configuration data to DevOps Config
+            stage('Upload Configuration Data') {
                   steps {
                         sh "echo validating configuration file ${configFilePath}"
                         script {
-//                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
-                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'false',autoValidate:'false',dataFormat:"${exportFormat}")
-                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:'k8s/helm/keka_test/*.json', autoCommit:'true',autoValidate:'true',dataFormat:'json',changesetNumber:"${changeSetId}")
+                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
 
                               echo "validation result $changeSetId"
 
                               if(changeSetId != null) {
-
+                                    /* // DevOps Change Enable
                                     echo "Change set registration for ${changeSetId}"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                                     echo "change set registration set result ${changeSetRegResult}"
-                                    
+                                    */
                               } else {
-                                    
                                     error "Change set was not created"
                               }
                         }
                   }
-                  
             }
 
+            // Get snapshot result for uploaded configuration data
+            stage("Get Snapshot Status") {
+                  steps {
+                        echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
 
-            stage("Get snapshot status"){
-                  steps{
+                        script {
+                              changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}",changesetNumber:"${changeSetId}")
+                              if (!changeSetResults){
+                                    isSnapshotCreated=false
+                                    echo "no snapshot were created"
+                              } else {
+                                    isSnapshotCreated = true;
 
-                  echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
-            
-                  script{
-                        
-                        changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}",changesetNumber:"${changeSetId}",outputFormat:"xml")
-                        if (!changeSetResults){
-                              isSnapshotCreated=false
-                              echo "no snapshot were created"
-                        }
-                        else{
-                              isSnapshotCreated = true;
-                        
-                              echo "ChangeSet Result : ${changeSetResults}"
+                                    echo "ChangeSet Result : ${changeSetResults}"
 
+                                    def changeSetResultsObject = readJSON text: changeSetResults
 
-                              def changeSetResultsObject = readJSON text: changeSetResults
-
-                              changeSetResultsObject.each {
-                                    snapshotName = it.name
-                                    snapshotObject = it
+                                    changeSetResultsObject.each {
+                                          snapshotName = it.name
+                                          snapshotObject = it
+                                    }
+                                    snapshotValidationStatus = snapshotObject.validation
+                                    snapshotPublishedStatus = snapshotObject.published 
                               }
-                              
-                              snapshotValidationStatus = snapshotObject.validation
-                              snapshotPublishedStatus = snapshotObject.published 
-                        
                         }
-                        }
-
                   }
-                  
-                  
-                  
             }
-            
-            
-            stage('Get latest snapshot'){
-                  
+            stage('Get Latest Snapshot'){
                   when {
                         expression { isSnapshotCreated == false }
                   }
-                  steps{
-                        script{
+                  steps {
+                        script {
                               echo "Get latest snapshot"
                               snapshotResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}")
-                              if (!snapshotResults){
+                              if (!snapshotResults) {
                                     error "no snapshots found"
-                              }
-                              else{
-
+                              } else {
                                     echo "Snapshot Result : ${snapshotResults}"
 
                                     def snapshotResultsObject = readJSON text: snapshotResults
@@ -232,45 +188,36 @@ pipeline {
                                           snapshotName = it.name
                                           snapshotObject = it;
                                     }
-                                    
                                     snapshotValidationStatus = snapshotObject.validation
                                     snapshotPublishedStatus = snapshotObject.published 
-
                               }
-                              
                         }
                   }
-
             }
-
-            stage ('Validate snapshot if not validated'){
+            stage('Validate Snapshot If Not Validated') {
                   when  {
                         expression { snapshotValidationStatus == 'Not Validated' }
                   }
-                  steps{
-                        script{
+                  steps {
+                        script {
                               validateResponse = snDevOpsConfigValidate( applicationName:"${appName}",deployableName:"${deployableName}",snapshotName: "${snapshotObject.name}" )
-                              if( validateResponse != null ){
+                              if(validateResponse != null) {
                                     echo "validation Response submited for ${snapshotObject.name}"
                               }
                         }
                   }
-                  
             }
-            
-            stage('Get latest snapshot after validation'){
+            stage('Get Latest Snapshot After Validation') {
                   when { 
-                        expression{ isSnapshotCreated == false && snapshotObject.validation == 'Not Validated'}
+                        expression { isSnapshotCreated == false && snapshotObject.validation == 'Not Validated'}
                   }
-                  steps{
-                        script{
+                  steps {
+                        script {
                               echo "Get latest snapshot for appName : ${appName} , deployableName: ${deployableName}"
                               snapshotResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}")
-                              if (!changeSetResults){
+                              if (!changeSetResults) {
                                     error "no snapshots found for appName : ${appName} , deployableName: ${deployableName}"
-                              }
-                              else{
-
+                              } else {
                                     echo "Snapshot Result : ${snapshotResults}"
 
                                     def snapshotResultsObject = readJSON text: snapshotResults
@@ -280,52 +227,49 @@ pipeline {
                                           snapshotObject = it;
                                     }
                                    snapshotValidationStatus = snapshotObject.validation
-                                   snapshotPublishedStatus = snapshotObject.published 
- 
-
+                                   snapshotPublishedStatus = snapshotObject.published
                               }
                         }
-
                   }
-
             }
 
-            stage('Check validity of snapshot')  {
-                  steps{
-                        script{
-                              echo " snapshot object : ${snapshotObject}"
-                              if(snapshotObject.validation == "passed"){
+            // Check if snapshot passed validation
+            stage('Check Snapshot is Valid')  {
+                  steps {
+                        script {
+                              echo "snapshot object : ${snapshotObject}"
+                              if(snapshotObject.validation == "passed") {
                                     echo "latest snapshot validation is passed"
-                                    
-                              }else{
+                              } else {
                                     error "latest snapshot validation failed"
-                                    
                               }
                         }
                   }
             }
             
-            stage('Publish the snapshot'){
+            // Publish snapshot now that it passed validation
+            stage('Publish Snapshot') {
                   when {
-                        
                         expression { snapshotValidationStatus == "passed" && snapshotPublishedStatus == false }
                   }
-                  steps{
-                        script{
+                  steps {
+                        script {
                               echo "Step to publish snapshot applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName}"
                               publishSnapshotResults = snDevOpsConfigPublish(applicationName:"${appName}",deployableName:"${deployableName}",snapshotName: "${snapshotName}")
-                              echo " Publish result for applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName} is ${publishSnapshotResults} "
+                              echo "Publish result for applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName} is ${publishSnapshotResults} "
                         }
-
                   }
             }
 
-            stage('Export Snapshots from Service Now') {
-                  steps{
-                        script{
-                              echo "Devops Change trigger change request"
+            // Export published snapshot to be used by downstream deployment tools
+            stage('Export Snapshots from ServiceNow') {
+                  steps {
+                        script {
+                              /* // DevOps Change Enable
+                              echo "DevOps Change - trigger change request"
                               snDevOpsChange()
-/*                              snDevOpsChange(changeRequestDetails: """{
+                              */
+                              /*snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
                                     "attributes": {
                                           "category": "DevOps",
@@ -341,42 +285,34 @@ pipeline {
 
                               echo "Exporting for App: ${appName} Deployable; ${deployableName} Exporter name ${exporterName} "
                               echo "Configfile exporter file name ${fullFileName}"
-                              sh  'echo "<<<<<<<<<export file is starting >>>>>>>>"'
+                              sh  'echo "<<<<<<<<< export file is starting >>>>>>>>"'
                               exportResponse = snDevOpsConfigExport(applicationName: "${appName}", snapshotName: "${snapshotObject.name}", deployableName: "${deployableName}",exporterFormat: "${exportFormat}", fileName:"${fullFileName}", exporterName: "${exporterName}", exporterArgs: "${exporterArgs}")
                               echo " RESPONSE FROM EXPORT : ${exportResponse}"
-
                         }
                   }
-
-
             }
-            
-            stage("Deploy to PROD-US"){
-                  steps{
-                        script{
+
+            // Deploy configuration data to production environment
+            stage("Deploy to Production") {
+                  steps {
+                        script {
                               echo "Reading config from file name ${fullFileName}"
                               echo " ++++++++++++ BEGIN OF File Content ***************"
                               sh "cat ${fullFileName}"
                               echo " ++++++++++++ END OF File content ***************"
-                              
                               echo "deploy finished successfully."
-
-                              
                               echo "********************** BEGIN Deployment ****************"
                               echo "Applying docker image ${dockerImageNameTag}"
-
-                        
                               echo "********************** END Deployment ****************"
                         }
                   }
-                  
             }
       }
-      
-      post{
-          always{
-                 echo ">>>>>Displaying Test results"
-                 junit '**/*.xml'
-          }
+      // NOTE: attach policy validation results to run (if the snapshot fails validation)
+      post {
+            always {
+                  echo ">>>>> Displaying Test results <<<<<"
+                  junit '**/*.xml'
+            }
       }
 }
