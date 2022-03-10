@@ -130,11 +130,11 @@ pipeline {
                               echo "validation result $changeSetId"
 
                               if(changeSetId != null) {
-                                    /*// DevOps Change Enable
+                                    // DevOps Change Enable
                                     echo "Change set registration for ${changeSetId}"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                                     echo "change set registration set result ${changeSetRegResult}"
-                                    */
+                                    
                               } else {
                                     error "Change set was not created"
                               }
@@ -269,19 +269,20 @@ pipeline {
                               echo "DevOps Change - trigger change request"
                               snDevOpsChange()
                               */
-                              /*snDevOpsChange(changeRequestDetails: """{
+                              echo "DevOps Change - trigger change request"
+                              snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
                                     "attributes": {
                                           "category": "DevOps",
                                           "priority": "3",
                                           "cmdb_ci": {
-                                              "name": "Servers - PaymentDemo - Prod-US"
+                                              "name": "Servers - PaymentDemo - Production"
                                           },
                                           "business_service": {
                                               "name": "PaymentDemo_Production_1"
                                           }
                                     }
-                              }""")*/
+                              }""")
 
                               echo "Exporting for App: ${appName} Deployable; ${deployableName} Exporter name ${exporterName} "
                               echo "Configfile exporter file name ${fullFileName}"
