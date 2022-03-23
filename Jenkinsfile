@@ -265,11 +265,11 @@ pipeline {
             stage('Export Snapshots from ServiceNow') {
                   steps {
                         script {
-                              /* // DevOps Change Enable
+                              // DevOps Change Enable
                               echo "DevOps Change - trigger change request"
                               snDevOpsChange()
-                              */
-                              echo "DevOps Change - trigger change request"
+                              
+                              /*echo "DevOps Change - trigger change request"
                               snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
                                     "attributes": {
@@ -283,6 +283,7 @@ pipeline {
                                           }
                                     }
                               }""")
+                              */
 
                               echo "Exporting for App: ${appName} Deployable; ${deployableName} Exporter name ${exporterName} "
                               echo "Configfile exporter file name ${fullFileName}"
