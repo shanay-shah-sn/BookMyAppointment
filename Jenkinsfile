@@ -130,11 +130,11 @@ pipeline {
                               echo "validation result $changeSetId"
 
                               if(changeSetId != null) {
-                                    // DevOps Change Enable
+                                    /* // DevOps Change Enable
                                     echo "Change set registration for ${changeSetId}"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                                     echo "change set registration set result ${changeSetRegResult}"
-                                    
+                                    */
                               } else {
                                     error "Change set was not created"
                               }
@@ -265,10 +265,10 @@ pipeline {
             stage('Export Snapshots from ServiceNow') {
                   steps {
                         script {
-                              // DevOps Change Enable
+                              /* // DevOps Change Enable
                               echo "DevOps Change - trigger change request"
                               snDevOpsChange()
-                              
+                              */
                               /*echo "DevOps Change - trigger change request"
                               snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
