@@ -130,11 +130,11 @@ pipeline {
                               echo "validation result $changeSetId"
 
                               if(changeSetId != null) {
-                                    /// DevOps Change Enable
+                                    /* // DevOps Change Enable
                                     echo "Change set registration for ${changeSetId}"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(changesetNumber:"${changeSetId}")
                                     echo "change set registration set result ${changeSetRegResult}"
-                                    
+                                    */
                               } else {
                                     error "Change set was not created"
                               }
@@ -148,7 +148,13 @@ pipeline {
                         echo "Triggering Get snapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
 
                         script {
-                              changeSetResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}",changesetNumber:"${changeSetId}")
+                              changeSetResults = snDevOpsConfigGetSnapshots(
+                                    applicationName:"${appName}",
+                                    deployableName:"${deployableName}",
+                                    changesetNumber:"${changeSetId}",
+                                    isValidated:true,
+                                    showResults:true
+                              )
                               if (!changeSetResults){
                                     isSnapshotCreated=false
                                     echo "no snapshot were created"
@@ -176,7 +182,10 @@ pipeline {
                   steps {
                         script {
                               echo "Get latest snapshot"
-                              snapshotResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}")
+                              snapshotResults = snDevOpsConfigGetSnapshots(
+                                    applicationName:"${appName}",
+                                    deployableName:"${deployableName}"
+                              )
                               if (!snapshotResults) {
                                     error "no snapshots found"
                               } else {
@@ -200,7 +209,11 @@ pipeline {
                   }
                   steps {
                         script {
-                              validateResponse = snDevOpsConfigValidate( applicationName:"${appName}",deployableName:"${deployableName}",snapshotName: "${snapshotObject.name}" )
+                              validateResponse = snDevOpsConfigValidate(
+                                    applicationName:"${appName}",
+                                    deployableName:"${deployableName}",
+                                    snapshotName: "${snapshotObject.name}"
+                              )
                               if(validateResponse != null) {
                                     echo "validation Response submited for ${snapshotObject.name}"
                               }
@@ -214,7 +227,10 @@ pipeline {
                   steps {
                         script {
                               echo "Get latest snapshot for appName : ${appName} , deployableName: ${deployableName}"
-                              snapshotResults = snDevOpsConfigGetSnapshots(applicationName:"${appName}",deployableName:"${deployableName}")
+                              snapshotResults = snDevOpsConfigGetSnapshots(
+                                    applicationName:"${appName}",
+                                    deployableName:"${deployableName}"
+                              )
                               if (!changeSetResults) {
                                     error "no snapshots found for appName : ${appName} , deployableName: ${deployableName}"
                               } else {
@@ -265,10 +281,10 @@ pipeline {
             stage('Export Snapshots from ServiceNow') {
                   steps {
                         script {
-                              // DevOps Change Enable
+                              /* // DevOps Change Enable
                               echo "DevOps Change - trigger change request"
                               snDevOpsChange()
-                              
+                              */
                               /*echo "DevOps Change - trigger change request"
                               snDevOpsChange(changeRequestDetails: """{
                                     "setCloseCode": false,
