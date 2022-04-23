@@ -152,9 +152,11 @@ pipeline {
                                     applicationName:"${appName}",
                                     deployableName:"${deployableName}",
                                     changesetNumber:"${changeSetId}",
-                                    isValidated:true,
-                                    showResults:true
+                                    isValidated: true,
+                                    showResults: true,
+                                    markFailed: false
                               )
+                              echo "!!!!!! Changeset Result: ${changeSetResults}"
                               if (!changeSetResults){
                                     isSnapshotCreated=false
                                     echo "no snapshot were created"
