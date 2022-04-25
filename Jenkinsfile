@@ -156,7 +156,6 @@ pipeline {
                                     showResults: true,
                                     markFailed: false
                               )
-                              echo "!!!!!! Changeset Result: ${changeSetResults}"
                               if (!changeSetResults){
                                     isSnapshotCreated=false
                                     echo "no snapshot were created"
