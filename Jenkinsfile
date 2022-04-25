@@ -268,7 +268,7 @@ pipeline {
             // Publish snapshot now that it passed validation
             stage('Publish Snapshot') {
                   when {
-                        expression { snapshotValidationStatus == "passed" && snapshotPublishedStatus == false }
+                        expression { (snapshotValidationStatus == "passed" || snapshotValidationStatus == "passed_with_exception") && snapshotPublishedStatus == false }
                   }
                   steps {
                         script {
