@@ -256,7 +256,7 @@ pipeline {
                   steps {
                         script {
                               echo "snapshot object : ${snapshotObject}"
-                              if(snapshotObject.validation == "passed") {
+                              if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
                                     echo "latest snapshot validation is passed"
                               } else {
                                     error "latest snapshot validation failed"
