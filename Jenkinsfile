@@ -365,6 +365,9 @@ pipeline {
                   // attach policy validation results
                   echo ">>>>> Displaying Test results <<<<<"
                   junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
+                  if(snapshotObject.validation == "passed_with_exception") {
+                        sh "test ${currentBuild.currentResult} != UNSTABLE"
+                  } 
             }
       }
 }
