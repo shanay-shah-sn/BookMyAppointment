@@ -12,8 +12,11 @@
 * exporterArgs = ''
 */
 
-pipeline {    
-
+pipeline {
+      environment {
+            buildArtifactsPath = "build_artifacts/${currentBuild.number}"
+            validationResultsPath = ""
+      }
       agent any
       /**
       * Jenkins pipline related variables
@@ -45,7 +48,6 @@ pipeline {
                               /**
                               * Jenkins variables declared to be used in pipeline
                               */
-                              buildArtifactsPath = "build_artifacts/${currentBuild.number}"
                               exportFileName = "${buildArtifactsPath}/export_file-${appName}-${deployableName}-${currentBuild.number}.${exportFormat}"
                               changeSetId = ""
                               dockerImageTag = ""
@@ -54,7 +56,6 @@ pipeline {
                               isSnapshotCreated = false
                               isSnapshotValidateionRequired = false
                               isSnapshotPublisingRequired = false
-                              validationResultsPath = ""
 
                               /**
                               * Checking for parameters
