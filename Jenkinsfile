@@ -270,6 +270,7 @@ pipeline {
                   steps {
                         script {
                               echo "snapshot object : ${snapshotObject}"
+                              validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
                               if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
                                     echo "latest snapshot validation is passed"
                               } else {
@@ -354,7 +355,6 @@ pipeline {
       post {
             always {
                 // move policy validation results to build artifacts folder
-                validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
                 echo "validation results path: ${validationResultsPath}"
                 //sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
                 echo "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
