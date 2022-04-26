@@ -86,6 +86,11 @@ pipeline {
                                     }
                               }
                         }
+                        echo "---- Build Parameters ----"
+                        echo "applicationName: ${appName}"
+                        echo "namePath: ${componentName}"
+                        echo "configFile: ${configFilePath}"
+                        echo "dataFormat: ${exportFormat}"
                   }
             }
             
@@ -125,7 +130,15 @@ pipeline {
                   steps {
                         sh "echo validating configuration file ${configFilePath}"
                         script {
-                              changeSetId = snDevOpsConfigUpload(applicationName:"${appName}",target:'component',namePath:"${componentName}", configFile:"${configFilePath}", autoCommit:'true',autoValidate:'true',dataFormat:"${exportFormat}")
+                              changeSetId = snDevOpsConfigUpload(
+                                    applicationName: "${appName}",
+                                    target: 'component',
+                                    namePath: "${componentName}",
+                                    configFile: "${configFilePath}",
+                                    autoCommit: 'true',
+                                    autoValidate: 'true',
+                                    dataFormat: "${exportFormat}"
+                              )
 
                               echo "validation result $changeSetId"
 
