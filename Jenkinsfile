@@ -364,10 +364,7 @@ pipeline {
                   sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
                   // attach policy validation results
                   echo ">>>>> Displaying Test results <<<<<"
-                  // junit '**/*.xml'
-                  junit "${buildArtifactsPath}/tests/${validationResultsPath}"
-                  // clean up the workspace (adios previous files)
-                  sh "rm ./*.xml ./*.yaml"
+                  junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
             }
       }
 }
