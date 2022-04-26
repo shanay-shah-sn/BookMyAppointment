@@ -86,11 +86,13 @@ pipeline {
                                     }
                               }
                         }
+                        sh '''
                         echo "---- Build Parameters ----"
                         echo "applicationName: ${appName}"
                         echo "namePath: ${componentName}"
                         echo "configFile: ${configFilePath}"
                         echo "dataFormat: ${exportFormat}"
+                        '''
                   }
             }
             
