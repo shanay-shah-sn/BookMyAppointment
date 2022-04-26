@@ -320,16 +320,18 @@ pipeline {
 
                               echo "Exporting config data for App: ${appName}, Deployable: ${deployableName}, Exporter: ${exporterName} "
                               echo "Export file name ${exportFileName}"
-                              sh  'echo "<<<<<<<<< Starting config data export >>>>>>>>"'
-                              exportResponse = snDevOpsConfigExport(
-                                    applicationName: "${appName}",
-                                    snapshotName: "${snapshotObject.name}",
-                                    deployableName: "${deployableName}",
-                                    exporterFormat: "${exportFormat}",
-                                    fileName: "${exportFileName}",
-                                    exporterName: "${exporterName}",
-                                    exporterArgs: "${exporterArgs}"
-                              )
+                              echo "<<<<<<<<< Starting config data export >>>>>>>>"
+                              dir ($buildArtifactsPath) {
+                                    exportResponse = snDevOpsConfigExport(
+                                          applicationName: "${appName}",
+                                          snapshotName: "${snapshotObject.name}",
+                                          deployableName: "${deployableName}",
+                                          exporterFormat: "${exportFormat}",
+                                          fileName: "${exportFileName}",
+                                          exporterName: "${exporterName}",
+                                          exporterArgs: "${exporterArgs}"
+                                    )
+                              }
                               echo " RESPONSE FROM EXPORT : ${exportResponse}"
                         }
                   }
