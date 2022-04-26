@@ -367,7 +367,7 @@ pipeline {
                   junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
                   script {
                         if(snapshotObject.validation == "passed_with_exception") {
-                              currentBuild.rawBuild.@result = hudson.model.Result.SUCCESS
+                              currentBuild.result = hudson.model.Result.FAILURE.toString()
                         }
                   }
             }
