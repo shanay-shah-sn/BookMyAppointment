@@ -366,6 +366,8 @@ pipeline {
                   echo ">>>>> Displaying Test results <<<<<"
                   // junit '**/*.xml'
                   junit "${buildArtifactsPath}/tests/${validationResultsPath}"
+                  // clean up the workspace (adios previous files)
+                  sh "rm ./*.xml ./*.yaml"
             }
       }
 }
