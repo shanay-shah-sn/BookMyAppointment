@@ -358,13 +358,14 @@ pipeline {
       // NOTE: attach policy validation results to run (if the snapshot fails validation)
       post {
             always {
-                // move policy validation results to build artifacts folder
-                echo "validation results path: ${validationResultsPath}"
-                //sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
-                echo "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
-                // attach policy validation results
-                echo ">>>>> Displaying Test results <<<<<"
-                junit '**/*.xml'
+                  // create tests dir
+                  sh "mkdir -p ${buildArtifactsPath}/tests"
+                  // move policy validation results to build artifacts folder
+                  sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
+                  // attach policy validation results
+                  echo ">>>>> Displaying Test results <<<<<"
+                  // junit '**/*.xml'
+                  junit "${buildArtifactsPath}/tests/${validationResultsPath}"
             }
       }
 }
