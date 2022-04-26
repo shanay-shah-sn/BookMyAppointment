@@ -322,7 +322,7 @@ pipeline {
                               echo "Exporting config data for App: ${appName}, Deployable: ${deployableName}, Exporter: ${exporterName} "
                               echo "Export file name ${exportFileName}"
                               echo "<<<<<<<<< Starting config data export >>>>>>>>"
-                              dir ($buildArtifactsPath) {
+                              dir ("${buildArtifactsPath}") {
                                     exportResponse = snDevOpsConfigExport(
                                           applicationName: "${appName}",
                                           snapshotName: "${snapshotObject.name}",
