@@ -365,11 +365,6 @@ pipeline {
                   // attach policy validation results
                   echo ">>>>> Displaying Test results <<<<<"
                   junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
-                  script {
-                        if(snapshotObject.validation == "passed_with_exception") {
-                              currentBuild.result = hudson.model.Result.SUCCESS.toString()
-                        }
-                  }
             }
       }
 }
