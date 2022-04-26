@@ -45,8 +45,8 @@ pipeline {
                               /**
                               * Jenkins variables declared to be used in pipeline
                               */
-                              fileNamePrefix = 'exported_file_'
-                              fullFileName = "${fileNamePrefix}-${deployableName}-${currentBuild.number}.${exportFormat}"
+                              buildArtifactsPath = "build_artifacts/${currentBuild.number}"
+                              exportFileName = "${buildArtifactsPath}/export_file-${appName}-${deployableName}-${currentBuild.number}.${exportFormat}"
                               changeSetId = ""
                               dockerImageTag = ""
                               snapshotName = ""
@@ -54,6 +54,7 @@ pipeline {
                               isSnapshotCreated = false
                               isSnapshotValidateionRequired = false
                               isSnapshotPublisingRequired = false
+                              validationResultsPath = ""
 
                               /**
                               * Checking for parameters
@@ -316,10 +317,18 @@ pipeline {
                               }""")
                               */
 
-                              echo "Exporting for App: ${appName} Deployable; ${deployableName} Exporter name ${exporterName} "
-                              echo "Configfile exporter file name ${fullFileName}"
-                              sh  'echo "<<<<<<<<< export file is starting >>>>>>>>"'
-                              exportResponse = snDevOpsConfigExport(applicationName: "${appName}", snapshotName: "${snapshotObject.name}", deployableName: "${deployableName}",exporterFormat: "${exportFormat}", fileName:"${fullFileName}", exporterName: "${exporterName}", exporterArgs: "${exporterArgs}")
+                              echo "Exporting config data for App: ${appName}, Deployable: ${deployableName}, Exporter: ${exporterName} "
+                              echo "Export file name ${exportFileName}"
+                              sh  'echo "<<<<<<<<< Starting config data export >>>>>>>>"'
+                              exportResponse = snDevOpsConfigExport(
+                                    applicationName: "${appName}",
+                                    snapshotName: "${snapshotObject.name}",
+                                    deployableName: "${deployableName}",
+                                    exporterFormat: "${exportFormat}",
+                                    fileName: "${exportFileName}",
+                                    exporterName: "${exporterName}",
+                                    exporterArgs: "${exporterArgs}"
+                              )
                               echo " RESPONSE FROM EXPORT : ${exportResponse}"
                         }
                   }
@@ -329,11 +338,11 @@ pipeline {
             stage("Deploy to Production") {
                   steps {
                         script {
-                              echo "Reading config from file name ${fullFileName}"
+                              echo "Show exported config data from file name ${exportFileName}"
                               echo " ++++++++++++ BEGIN OF File Content ***************"
-                              sh "cat ${fullFileName}"
+                              sh "cat ${exportFileName}"
                               echo " ++++++++++++ END OF File content ***************"
-                              echo "deploy finished successfully."
+                              echo "Exported config data handed off to deployment tool"
                               echo "********************** BEGIN Deployment ****************"
                               echo "Applying docker image ${dockerImageNameTag}"
                               echo "********************** END Deployment ****************"
@@ -344,8 +353,14 @@ pipeline {
       // NOTE: attach policy validation results to run (if the snapshot fails validation)
       post {
             always {
-                  echo ">>>>> Displaying Test results <<<<<"
-                  junit '**/*.xml'
+                // move policy validation results to build artifacts folder
+                validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                echo "validation results path: ${validationResultsPath}"
+                //sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
+                echo "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
+                // attach policy validation results
+                echo ">>>>> Displaying Test results <<<<<"
+                junit '**/*.xml'
             }
       }
 }
