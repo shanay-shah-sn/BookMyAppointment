@@ -171,8 +171,7 @@ pipeline {
                                     applicationName:"${appName}",
                                     deployableName:"${deployableName}",
                                     changesetNumber:"${changeSetId}",
-                                    isValidated: true,
-                                    showResults: true,
+                                    showResults: false,
                                     markFailed: false
                               )
                               if (!changeSetResults){
