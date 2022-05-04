@@ -1,8 +1,8 @@
 replicaCount: "2"
 
 mongo:
-  dbport : "57091"
-  dbUrl: "https://awesome.uswest1.prd-training.mongodb"
+  dbport : "5709"
+  dbUrl: "https://awesome.uswest1.training.mongodb"
   dbUserName : '@@dbUserName@@'
   dbPassword : '@@dbPassword@@'
 
@@ -76,7 +76,7 @@ resources:
 
 autoscaling:
   enabled: false
-  minReplicas: "1"
+  minReplicas: "2"
   maxReplicas: "10"
   targetCPUUtilizationPercentage: "80"
   # targetMemoryUtilizationPercentage: "80"
