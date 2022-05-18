@@ -42,7 +42,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: "8080"
+  port: "808000"
   
 routing:
   enabled: true 
