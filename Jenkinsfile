@@ -303,7 +303,13 @@ pipeline {
                         script {
                               // // DevOps Change Enable
                               echo "DevOps Change - trigger change request"
+                              /* pre-D2A
                               snDevOpsChange()
+                              */
+                              snDevOpsChange(
+                                    applicationName: "${appName}",
+                                    snapshotName: "${snapshotName}"
+                              )
                               //
                               /*echo "DevOps Change - trigger change request"
                               snDevOpsChange(changeRequestDetails: """{
