@@ -43,7 +43,7 @@ pipeline {
                               /**
                               * Devops Config exporter related information
                               */
-                              exporterName = 'returnAllData-nowPreview' 
+                              exporterName = 'returnAllData-now' 
                               exporterArgs = ''
                               /**
                               * Jenkins variables declared to be used in pipeline
