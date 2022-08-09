@@ -31,8 +31,8 @@ pipeline {
                               /**
                               * DevOps Config App related information
                               */
-                              appName = 'PaymentDemo'
-                              deployableName = 'Production'
+                              appName = 'DemoApp1'
+                              deployableName = 'Staging'
                               componentName = "web-api-v1.0"
                               collectionName = "release-1.0"
                               /**
@@ -43,7 +43,7 @@ pipeline {
                               /**
                               * Devops Config exporter related information
                               */
-                              exporterName = 'returnAllData-nowPreview' 
+                              exporterName = 'returnAllData-now' 
                               exporterArgs = ''
                               /**
                               * Jenkins variables declared to be used in pipeline
