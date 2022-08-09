@@ -1,7 +1,7 @@
 replicaCount: "2"
 
 mongo:
-  dbport : "57087"
+  dbport : "57086"
   dbUrl: "https://awesome.uswest1.prd-studio.mongodb"
   dbUserName : '@@dbUserName@@'
   dbPassword : '@@dbPassword@@'
