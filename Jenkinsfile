@@ -135,10 +135,11 @@ pipeline {
                                         autoCommit: 'true',
                                         autoValidate: 'true',
                                         dataFormat: "${exportFormat}"
-                                    )
+                                    )*/
 
                                     echo "Changeset: $changeSetId created"
-
+                                    
+                                    /*
                                     if(changeSetId != null) {
                                         // // DevOps Change Enable
                                         echo "Register changeset: ${changeSetId} to pipeline"
