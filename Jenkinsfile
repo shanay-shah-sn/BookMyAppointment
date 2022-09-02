@@ -127,7 +127,7 @@ pipeline {
                             steps {
                                 sh "echo uploading (and auto-validating) configuration file: ${configFilePath}"
                                 script {
-                                    changeSetId = snDevOpsConfigUpload(
+                                    /*changeSetId = snDevOpsConfigUpload(
                                         applicationName: "${appName}",
                                         target: 'component',
                                         namePath: "${componentName}",
@@ -135,7 +135,7 @@ pipeline {
                                         autoCommit: 'true',
                                         autoValidate: 'true',
                                         dataFormat: "${exportFormat}"
-                                    )
+                                    )*/
 
                                     echo "Changeset: $changeSetId created"
 
