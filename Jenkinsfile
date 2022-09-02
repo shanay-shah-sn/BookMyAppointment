@@ -135,7 +135,7 @@ pipeline {
                                         autoCommit: 'true',
                                         autoValidate: 'true',
                                         dataFormat: "${exportFormat}"
-                                    )*/
+                                    )
 
                                     echo "Changeset: $changeSetId created"
 
@@ -150,7 +150,7 @@ pipeline {
                                         //
                                     } else {
                                         error "Changeset was not created"
-                                    }
+                                    }*/
                                 }
                             }
                         }
