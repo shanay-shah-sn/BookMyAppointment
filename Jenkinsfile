@@ -98,7 +98,7 @@ pipeline {
         }
             
         // Build and publish application image
-        stage('Build docker image') {      
+        stage('Build') {      
             steps {
                 checkout scm    
                 echo "scm checkout successful"
@@ -108,8 +108,8 @@ pipeline {
                     dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
 
                     snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
-                    echo " docker Image artifacat ${dockerImageNameTag} "
-                    echo "snDevopsArtifactPayload ${snDevopsArtifactPayload} "
+                    echo " Docker image artifact: ${dockerImageNameTag} "
+                    echo "snDevopsArtifactPayload: ${snDevopsArtifactPayload} "
 
                     snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
                 }
@@ -125,7 +125,7 @@ pipeline {
                         // Upload configuration data to DevOps Config
                         stage('Upload') {
                             steps {
-                                sh "echo uploading (and auto-validating) configuration file ${configFilePath}"
+                                sh "echo uploading (and auto-validating) configuration file: ${configFilePath}"
                                 script {
                                     changeSetId = snDevOpsConfigUpload(
                                         applicationName: "${appName}",
@@ -143,8 +143,8 @@ pipeline {
                                         // // DevOps Change Enable
                                         echo "Register changeset: ${changeSetId} to pipeline"
                                         changeSetRegResult = snDevOpsConfigRegisterPipeline(
-                                                applicationName: "${appName}",
-                                                changesetNumber:"${changeSetId}"
+                                            applicationName: "${appName}",
+                                            changesetNumber: "${changeSetId}"
                                         )
                                         echo "Pipeline registration result: ${changeSetRegResult}"
                                         //
