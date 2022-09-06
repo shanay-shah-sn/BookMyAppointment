@@ -5,6 +5,7 @@ mongo:
   dbUrl: "https://awesome.uswest1.prd-studio.mongodb"
   dbUserName : '@@dbUserName@@'
   dbPassword : '@@dbPassword@@'
+  
 
 image:
   repository: sannrao/demo-devops-app
@@ -16,7 +17,8 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-
+imageBuildNumber:
+  buildIdRef: grefId123
 
 serviceAccount:
   # Specifies whether a service account should be created
