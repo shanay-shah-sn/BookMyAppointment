@@ -31,10 +31,8 @@ pipeline {
                     /**
                     * DevOps Config App related information
                     */
-                    //appName = 'PaymentDemo'
-                    //deployableName = 'Production'
-                    appName = 'DonutDeliveryService'
-                    deployableName = 'Test'
+                    appName = 'PaymentDemo'
+                    deployableName = 'Production'
                     componentName = "web-api-v1.0"
                     collectionName = "release-1.0"
                     /**
