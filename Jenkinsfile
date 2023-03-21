@@ -298,14 +298,14 @@ pipeline {
                 //node('built-in')
                 script {
                     // // DevOps Change Enable
-                    echo "DevOps Change - trigger change request"
+                    //echo "DevOps Change - trigger change request"
                     /* pre-D2A
                     snDevOpsChange()
                     */
-                    snDevOpsChange(
+                    /*snDevOpsChange(
                             applicationName: "${appName}",
                             snapshotName: "${snapshotName}"
-                    )
+                    )*/
                     //
                     /*echo "DevOps Change - trigger change request"
                     snDevOpsChange(changeRequestDetails: """{
