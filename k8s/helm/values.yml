@@ -5,6 +5,7 @@ mongo:
   dbUrl: "https://awesome.uswest1.prd-studio.mongodb"
   dbUserName : '@@dbUserName@@'
   dbPassword : '@@dbPassword@@'
+  $dbSchema: 'warehouse'
   
 
 image:
