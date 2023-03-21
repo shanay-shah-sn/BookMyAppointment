@@ -298,7 +298,8 @@ pipeline {
                 //node('built-in')
                 script {
                     // // DevOps Change Enable
-                    //echo "DevOps Change - trigger change request"
+                    // echo "DevOps Change - trigger change request"
+                    echo "<<< Skip DevOps Change >>>"
                     /* pre-D2A
                     snDevOpsChange()
                     */
