@@ -297,16 +297,16 @@ pipeline {
             steps {
                 //node('built-in')
                 script {
-                    // // DevOps Change Enable
-                    // echo "DevOps Change - trigger change request"
-                    echo "<<< Skip DevOps Change >>>"
+                    // DevOps Change Enable
+                    echo "DevOps Change - trigger change request"
+                    // echo "<<< Skip DevOps Change >>>"
                     /* pre-D2A
                     snDevOpsChange()
                     */
-                    /*snDevOpsChange(
+                    snDevOpsChange(
                             applicationName: "${appName}",
                             snapshotName: "${snapshotName}"
-                    )*/
+                    )
                     //
                     /*echo "DevOps Change - trigger change request"
                     snDevOpsChange(changeRequestDetails: """{
