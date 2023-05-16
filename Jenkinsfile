@@ -56,6 +56,7 @@ pipeline {
                     isSnapshotCreated = false
                     isSnapshotValidateionRequired = false
                     isSnapshotPublisingRequired = false
+                    skipChange = false
                     
                     buildNumberArtifact = "grefId123"
 
@@ -65,28 +66,31 @@ pipeline {
                     if(params) {
                         echo "setting values from build parameter"
                         if(params.appName) {
-                                appName = params.appName;
+                            appName = params.appName;
                         }
                         if(params.deployableName) {
-                                deployableName = params.deployableName
+                            deployableName = params.deployableName
                         }
                         if(params.componentName) {
-                                componentName = params.componentName
+                            componentName = params.componentName
                         }
                         if(params.collectionName) {
-                                collectionName = params.collectionName
+                            collectionName = params.collectionName
                         }
                         if(params.exportFormat) {
-                                exportFormat = params.exportFormat
+                            exportFormat = params.exportFormat
                         }
                         if(params.configFilePath) {
-                                configFilePath = params.configFilePath
+                            configFilePath = params.configFilePath
                         }
                         if(params.exporterName) {
-                                exporterName = params.exporterName
+                            exporterName = params.exporterName
                         }
                         if(params.exporterArgs) {
-                                exporterArgs = params.exporterArgs
+                            exporterArgs = params.exporterArgs
+                        }
+                        if(params.skipChange) {
+                            skipChange = params.skipChange
                         }
                     }
                 }
@@ -297,17 +301,17 @@ pipeline {
             steps {
                 //node('built-in')
                 script {
-                    // DevOps Change Enable
-                    echo "DevOps Change - trigger change request"
-                    // echo "<<< Skip DevOps Change >>>"
-                    /* pre-D2A
-                    snDevOpsChange()
-                    */
-                    snDevOpsChange(
-                            applicationName: "${appName}",
-                            snapshotName: "${snapshotName}"
-                    )
-                    //
+                    // Enable change acceleration
+                    if(!skipChange) {
+                        echo "DevOps Change - trigger change request"
+                        snDevOpsChange(
+                                applicationName: "${appName}",
+                                snapshotName: "${snapshotName}"
+                        )
+                    } else {
+                        echo "<<< Skip DevOps Change >>>"
+                    }
+                    // ALTERNATE - CR with application service details
                     /*echo "DevOps Change - trigger change request"
                     snDevOpsChange(changeRequestDetails: """{
                             "setCloseCode": false,
