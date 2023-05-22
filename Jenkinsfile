@@ -38,13 +38,14 @@ pipeline {
                     /**
                     * Configuration File information to be uploaded
                     */ 
-                    exportFormat = 'yaml'
+                    configFileFormat = 'yaml'
                     configFilePath = "k8s/helm/values.yml"
                     /**
                     * Devops Config exporter related information
                     */
                     exporterName = 'returnAllData-nowPreview' 
                     exporterArgs = ''
+                    exportFormat = 'yaml'
                     /**
                     * Jenkins variables declared to be used in pipeline
                     */
@@ -77,8 +78,8 @@ pipeline {
                         if(params.collectionName) {
                             collectionName = params.collectionName
                         }
-                        if(params.exportFormat) {
-                            exportFormat = params.exportFormat
+                        if(params.configFileFormat) {
+                            configFileFormat = params.configFileFormat
                         }
                         if(params.configFilePath) {
                             configFilePath = params.configFilePath
@@ -89,6 +90,9 @@ pipeline {
                         if(params.exporterArgs) {
                             exporterArgs = params.exporterArgs
                         }
+                        if(params.exportFormat) {
+                            exportFormat = params.exportFormat
+                        }
                         if(params.skipChange) {
                             skipChange = params.skipChange
                         }
@@ -98,7 +102,7 @@ pipeline {
                 applicationName: ${appName}
                 namePath: ${componentName}
                 configFile: ${configFilePath}
-                dataFormat: ${exportFormat}
+                dataFormat: ${configFileFormat}
                 """
             }
         }
@@ -142,7 +146,7 @@ pipeline {
                                         configFile: "${configFilePath}",
                                         autoCommit: 'true',
                                         autoValidate: 'true',
-                                        dataFormat: "${exportFormat}"
+                                        dataFormat: "${configFileFormat}"
                                     )
 
                                     echo "Changeset: $changeSetId created"
