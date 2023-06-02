@@ -182,7 +182,7 @@ pipeline {
                                     if (!changeSetResults){
                                         isSnapshotCreated=false
 
-                                        echo "Changeset result : ${changeSetResults}; No snapshots were created"
+                                        echo "Changeset result : ${changeSetResults} No snapshots were created"
                                     } else {
                                         isSnapshotCreated = true;
                                         
