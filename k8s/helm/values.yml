@@ -1,7 +1,7 @@
 replicaCount: "2"
 
 mongo:
-  dbport : "57019"
+  dbport : "27017"
   dbUrl: "https://awesome.uswest1.prd-studio.mongodb"
   dbUserName : '@@dbUserName@@'
   dbPassword : '@@dbPassword@@'  
@@ -18,8 +18,8 @@ fullnameOverride: ""
 
 imageBuildNumber:
   buildIdRef: "grefId123"
-  buildTag1: " configTest"
-  buildTag2: "whiteSpaceTest 2 "
+  buildTag1: "configTest"
+  buildTag2: "whiteSpaceTest 2"
 
 serviceAccount:
   # Specifies whether a service account should be created
