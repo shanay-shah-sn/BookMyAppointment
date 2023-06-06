@@ -19,7 +19,7 @@ fullnameOverride: ""
 imageBuildNumber:
   buildIdRef: "grefId123"
   buildTag1: "configTest"
-  buildTag2: "whiteSpaceTest 2"
+  buildTag2: "whiteSpaceTest"
 
 serviceAccount:
   # Specifies whether a service account should be created
