@@ -135,8 +135,8 @@ pipeline {
                         // Upload configuration data to DevOps Config
                         stage('Upload') {
                             steps {
-                                sh "echo updating configfile with build number to allow rerun without config file changes"
-                                sh "sed -i 's/${buildNumberArtifact}/${BUILD_NUMBER}/g' ${configFilePath}"
+                                //sh "echo updating configfile with build number to allow rerun without config file changes"
+                                //sh "sed -i 's/${buildNumberArtifact}/${BUILD_NUMBER}/g' ${configFilePath}"
                                 sh "echo uploading and auto-validating configuration file: ${configFilePath}"
                                 script {
                                     changeSetId = snDevOpsConfigUpload(
