@@ -114,6 +114,8 @@ pipeline {
             
         // Validate code and config data
         stage('Validate') {
+            parallel {
+
                 // Validate application code changes (SIMULATED)
                 stage('Code') { 
                     stages {
@@ -130,6 +132,7 @@ pipeline {
                         }
                     }    
                 }
+            }
         }
 
         // Deploy configuration data to UAT environment
