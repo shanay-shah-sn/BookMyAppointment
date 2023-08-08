@@ -161,41 +161,6 @@ pipeline {
                 }
             }
         }
-        
-        // Submit change management review
-        stage('Change Management') {
-            steps {
-                //node('built-in')
-                script {
-                    // Enable change acceleration
-                    if(skipChange) {
-                        echo "<<< Skip DevOps Change >>>"
-                    } else {
-                        echo "DevOps Change - trigger change request"
-                        snDevOpsChange(
-                                applicationName: "${appName}",
-                                snapshotName: "${snapshotName}"
-                        )
-                        // ALTERNATE - CR with application service details
-                        /*echo "DevOps Change - trigger change request"
-                        snDevOpsChange(changeRequestDetails: """{
-                                "setCloseCode": false,
-                                "attributes": {
-                                    "category": "DevOps",
-                                    "priority": "3",
-                                    "cmdb_ci": {
-                                        "name": "Servers - PaymentDemo - Production"
-                                    },
-                                    "business_service": {
-                                        "name": "PaymentDemo_Production_1"
-                                    }
-                                }
-                        }""")
-                        */
-                    }
-                }     
-            }
-        }
 
         // Deploy application code and configuration data to production environment
         stage('Deploy to Production') {
