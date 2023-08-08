@@ -166,9 +166,8 @@ pipeline {
         stage('Deploy to Production') {
                 steps {
                     script {
-                            echo "Show exported config data from file name ${exportFileName}"
+                            echo "Show exported config data from file name"
                             echo " ++++++++++++ BEGIN OF File Content ***************"
-                            sh "cat ${exportFileName}"
                             echo " ++++++++++++ END OF File content ***************"
                             echo "Exported config data handed off to deployment tool"
                             echo "********************** BEGIN Deployment ****************"
