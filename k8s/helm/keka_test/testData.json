@@ -1,9 +1,0 @@
-{
-	"test": "value",
-	"testNoClearSensitiveData": {
-		"noClearSensitiveData-password-KO1": "admin124",
-		"noClearSensitiveData-pwd-KO2": "admin124",
-		"noClearSensitiveData-secret-KO3": "admin124",
-		"noClearSensitiveData-pwd-exception": "admin1234567"
-	}
-}
