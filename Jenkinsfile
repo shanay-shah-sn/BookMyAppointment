@@ -182,12 +182,12 @@ pipeline {
     post {
         always {
             // create tests dir
-            sh "mkdir -p ${buildArtifactsPath}/tests"
+            //sh "mkdir -p ${buildArtifactsPath}/tests"
             // move policy validation results to build artifacts folder
-            sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
+            //sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
             // attach policy validation results
             echo ">>>>> Displaying Test results <<<<<"
-            junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
+            //junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
         }
     }
 }
