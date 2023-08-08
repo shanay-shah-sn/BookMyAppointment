@@ -100,7 +100,8 @@ pipeline {
                 echo "scm checkout successful"
                 
                 script {
-                    dockerImageTag = env.BUILD_NUMBER
+                    //dockerImageTag = env.BUILD_NUMBER
+                    dockerImageTag = "1.2"
                     dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
 
                     snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
