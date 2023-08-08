@@ -1,17 +1,3 @@
-/**
-* Parameters can be sent via build parameters, instead of changing the code.
-* Use the same variable name to set the build parameters.
-* List of parameters that can be passed
-* appName='devops-demo-web-app'
-* deployableName = 'PROD-US'
-* componentName="web-app-v1.1"
-* collectionName="release-1.0"
-* exportFormat ='yaml'
-* configFilePath = "k8s/helm/values.yml"
-* exporterName ='returnAllData-nowPreview' 
-* exporterArgs = ''
-*/
-
 pipeline {
     environment {
         buildArtifactsPath = "build_artifacts/${currentBuild.number}"
@@ -128,132 +114,6 @@ pipeline {
             
         // Validate code and config data
         stage('Validate') {
-            parallel {
-                // Validate configuration data changes
-                stage('Config') {
-                    stages('Config Steps') {
-                        // Upload configuration data to DevOps Config
-                        stage('Upload') {
-                            steps {
-                                //sh "echo updating configfile with build number to allow rerun without config file changes"
-                                //sh "sed -i 's/${buildNumberArtifact}/${BUILD_NUMBER}/g' ${configFilePath}"
-                                sh "echo uploading and auto-validating configuration file: ${configFilePath}"
-                                script {
-                                    changeSetId = snDevOpsConfigUpload(
-                                        applicationName: "${appName}",
-                                        target: 'component',
-                                        namePath: "${componentName}",
-                                        configFile: "${configFilePath}",
-                                        autoCommit: 'true',
-                                        autoValidate: 'true',
-                                        dataFormat: "${configFileFormat}"
-                                    )
-
-                                    echo "Changeset: $changeSetId created"
-
-                                    if(changeSetId != null) {
-                                        echo "Register changeset: ${changeSetId} to pipeline"
-                                        changeSetRegResult = snDevOpsConfigRegisterPipeline(
-                                            applicationName: "${appName}",
-                                            changesetNumber: "${changeSetId}"
-                                        )
-                                        echo "Pipeline registration result: ${changeSetRegResult}"
-                                        //
-                                    } else {
-                                        error "Changeset was not created"
-                                    }
-                                }
-                            }
-                        }
-
-                        // Auto-validation was set during upload; get status of snapshot
-                        stage('Validate') {
-                            steps {
-                                echo "Triggering snDevOpsConfigGetSnapshots for applicationName:${appName},deployableName:${deployableName},changeSetId:${changeSetId}"
-
-                                script {
-                                    changeSetResults = snDevOpsConfigGetSnapshots(
-                                        applicationName:"${appName}",
-                                        deployableName:"${deployableName}",
-                                        changesetNumber:"${changeSetId}",
-                                        showResults: false,
-                                        markFailed: false
-                                    )
-                                    if (!changeSetResults){
-                                        isSnapshotCreated=false
-
-                                        //echo "Changeset result : ${changeSetResults}"
-                                        echo "No snapshots were created"
-                                    } else {
-                                        isSnapshotCreated = true;
-                                        
-                                        echo "Changeset result : ${changeSetResults}"
-
-                                        def changeSetResultsObject = readJSON text: changeSetResults
-
-                                        changeSetResultsObject.each {
-                                            snapshotName = it.name
-                                            snapshotObject = it
-                                        }
-                                        snapshotValidationStatus = snapshotObject.validation
-                                        snapshotPublishedStatus = snapshotObject.published 
-                                    }
-                                }
-
-                                script {
-                                    echo "Snapshot object : ${snapshotObject}"
-
-                                    validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                    
-                                    if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
-                                        echo "Latest snapshot passed validation"
-                                    } else {
-                                        error "Latest snapshot failed"
-                                    }
-                                }
-                            }
-                        }
-
-                        // Publish snapshot now that it passed validation
-                        stage('Publish') {
-                            when {
-                                expression { (snapshotValidationStatus == "passed" || snapshotValidationStatus == "passed_with_exception") && snapshotPublishedStatus == false }
-                            }
-                            steps {
-                                script {
-                                    echo "Step to publish snapshot applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName}"
-                                    publishSnapshotResults = snDevOpsConfigPublish(applicationName:"${appName}",deployableName:"${deployableName}",snapshotName: "${snapshotName}")
-                                    echo "Publish result for applicationName:${appName},deployableName:${deployableName} snapshotName:${snapshotName} is ${publishSnapshotResults} "
-                                }
-                            }
-                        }
-
-                        // Export published snapshot to be used by downstream deployment tools
-                        stage('Export') {
-                            steps {
-                                script {
-                                    echo "Exporting config data for App: ${appName}, Deployable: ${deployableName}, Exporter: ${exporterName} "
-                                    echo "Export file name ${exportFileName}"
-                                    // create build artifacts dir if not created yet
-                                    sh "mkdir -p ${buildArtifactsPath}"
-                                    
-                                    echo "<<<<<<<<< Starting config data export >>>>>>>>"
-                                    exportResponse = snDevOpsConfigExport(
-                                            applicationName: "${appName}",
-                                            snapshotName: "${snapshotObject.name}",
-                                            deployableName: "${deployableName}",
-                                            exporterFormat: "${exportFormat}",
-                                            fileName: "${exportFileName}",
-                                            exporterName: "${exporterName}",
-                                            exporterArgs: "${exporterArgs}"
-                                    )
-                                    echo "RESPONSE FROM EXPORT : ${exportResponse}"
-                                }
-                            }
-                        }
-                    }
-                }
-
                 // Validate application code changes (SIMULATED)
                 stage('Code') { 
                     stages {
@@ -270,7 +130,6 @@ pipeline {
                         }
                     }    
                 }
-            }
         }
 
         // Deploy configuration data to UAT environment
