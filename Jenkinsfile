@@ -67,20 +67,11 @@ pipeline {
                                         namePath: "web-app-api/v1.0",
                                         configFile: "${configFilePath}",
                                         autoCommit: "true",
-                                        autoValidate: "true",
                                         dataFormat: "yaml"
                                     )
                                     echo "Changeset: $changeSetId created"
 
-                                    if(changeSetId != null) {
-                                        echo "Register changeset: ${changeSetId} to pipeline"
-                                        changeSetRegResult = snDevOpsConfigRegisterPipeline(
-                                            applicationName: "${appName}",
-                                            changesetNumber: "${changeSetId}"
-                                        )
-                                        echo "Pipeline registration result: ${changeSetRegResult}"
-                                        //
-                                    } else {
+                                    if(changeSetId == null) {
                                         error "Changeset was not created"
                                     }
                                 }
