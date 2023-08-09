@@ -15,15 +15,14 @@ pipeline {
                     dockerImageName = "BookMyAppointment/web-app"
                     buildNumberArtifact = "grefId123"
 
-                    if(params) {
-                        echo "setting values from build parameter"
-                        if(params.appName) {
-                            appName = params.appName;
-                        }
-                        if(params.deployableName) {
-                            deployableName = params.deployableName
-                        }
-                    }
+                    /**
+                    * DevOps Config App related information
+                    * Configuration File information to be uploaded
+                    */
+                    appName = 'BookMyAppointment'
+                    deployableName = 'Production'
+                    configFilePath = "k8s/helm/env/production/*.yaml"
+                    dataFormat = 'yaml'
                 }
                 echo """---- Build Parameters ----
                 applicationName: ${appName}
@@ -65,11 +64,10 @@ pipeline {
                                         applicationName: "${appName}",
                                         target: 'deployable',
                                         deployableName: "${deployableName}",
-                                        namePath: "web-app-api/v1.0",
-                                        configFile: 'k8s/helm/*.yml',
+                                        configFile: "${configFilePath}",
                                         autoCommit: 'true',
                                         autoValidate: 'true',
-                                        dataFormat: "yaml"
+                                        dataFormat: "${dataFormat}"
                                     )
                                     echo "Changeset: $changeSetId created"
                                 }
