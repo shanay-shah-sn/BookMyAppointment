@@ -78,6 +78,59 @@ pipeline {
                             }
                             
                         }
+                    
+                        // Auto-validation was set during upload; get status of snapshot
+                        stage('Validate') {
+                            steps {
+                                script {
+                                    changeSetResults = snDevOpsConfigGetSnapshots(
+                                        applicationName:"${appName}",
+                                        deployableName:"${deployableName}",
+                                        changesetNumber:"${changeSetId}",
+                                        showResults: false,
+                                        markFailed: false
+                                    )
+                                    if (!changeSetResults) {
+                                        echo "No snapshots were created"
+                                    } else {
+                                        echo "Changeset result : ${changeSetResults}"
+
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+
+                                        changeSetResultsObject.each {
+                                            snapshotName = it.name
+                                            snapshotObject = it
+                                        }
+                                        snapshotValidationStatus = snapshotObject.validation
+                                        snapshotPublishedStatus = snapshotObject.published 
+                                    }
+                                }
+
+                                script {
+                                    // Set path to snapshot validation results file
+                                    validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                    
+                                    if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
+                                        echo "Latest snapshot passed validation"
+                                    } else {
+                                        error "Latest snapshot failed validation"
+                                    }
+                                }
+                            }
+                        }
+
+                        // Publish snapshot now that it passed validation
+                        stage('Publish') {
+                            when {
+                                expression { (snapshotValidationStatus == "passed" || snapshotValidationStatus == "passed_with_exception") && snapshotPublishedStatus == false }
+                            }
+                            steps {
+                                script {
+                                    publishSnapshotResults = snDevOpsConfigPublish(applicationName:"${appName}",deployableName:"${deployableName}",snapshotName: "${snapshotName}")
+                                }
+                            }
+                        }
+                        
                     }
                 }
                 
