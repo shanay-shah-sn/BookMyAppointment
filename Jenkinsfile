@@ -64,7 +64,6 @@ pipeline {
                                         applicationName: "${appName}",
                                         target: 'deployable',
                                         deployableName: "${deployableName}",
-                                        namePath: "web-app-api_v1.0",
                                         configFile: 'k8s/helm/*.yml',
                                         autoCommit: 'true',
                                         autoValidate: 'true',
