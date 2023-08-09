@@ -12,44 +12,9 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    dockerImageName = "kekaichinose/web-app"
-
-                    /**
-                    * DevOps Config App related information
-                    */
-                    appName = 'PaymentDemo'
-                    deployableName = 'Production'
-                    componentName = "web-api-v1.0"
-                    collectionName = "release-1.0"
-                    /**
-                    * Configuration File information to be uploaded
-                    */ 
-                    configFileFormat = 'yaml'
-                    configFilePath = "k8s/helm/values.yml"
-                    /**
-                    * Devops Config exporter related information
-                    */
-                    exporterName = 'returnAllData-nowPreview' 
-                    exporterArgs = ''
-                    exportFormat = 'yaml'
-                    /**
-                    * Jenkins variables declared to be used in pipeline
-                    */
-                    exportFileName = "${buildArtifactsPath}/export_file-${appName}-${deployableName}-${currentBuild.number}.${exportFormat}"
-                    changeSetId = ""
-                    dockerImageTag = ""
-                    snapshotName = ""
-                    snapshotObject = ""
-                    isSnapshotCreated = false
-                    isSnapshotValidateionRequired = false
-                    isSnapshotPublisingRequired = false
-                    skipChange = false
-                    
+                    dockerImageName = "BookMyAppointment/web-app"
                     buildNumberArtifact = "grefId123"
 
-                    /**
-                    * Checking for parameters
-                    */
                     if(params) {
                         echo "setting values from build parameter"
                         if(params.appName) {
@@ -58,37 +23,10 @@ pipeline {
                         if(params.deployableName) {
                             deployableName = params.deployableName
                         }
-                        if(params.componentName) {
-                            componentName = params.componentName
-                        }
-                        if(params.collectionName) {
-                            collectionName = params.collectionName
-                        }
-                        if(params.configFileFormat) {
-                            configFileFormat = params.configFileFormat
-                        }
-                        if(params.configFilePath) {
-                            configFilePath = params.configFilePath
-                        }
-                        if(params.exporterName) {
-                            exporterName = params.exporterName
-                        }
-                        if(params.exporterArgs) {
-                            exporterArgs = params.exporterArgs
-                        }
-                        if(params.exportFormat) {
-                            exportFormat = params.exportFormat
-                        }
-                        if(params.skipChange) {
-                            skipChange = params.skipChange
-                        }
                     }
                 }
                 echo """---- Build Parameters ----
                 applicationName: ${appName}
-                namePath: ${componentName}
-                configFile: ${configFilePath}
-                dataFormat: ${configFileFormat}
                 """
             }
         }
@@ -117,6 +55,29 @@ pipeline {
         stage('Validate') {
             parallel {
 
+                stage('Config') {
+                    stages('Config Steps') {
+                        // Upload configuration data to DevOps Config
+                        stage('Upload') {
+                            steps {
+                                script {
+                                    changeSetId = snDevOpsConfigUpload(
+                                        applicationName: "${appName}",
+                                        target: 'deployable',
+                                        deployableName: "$(deployableName)"
+                                        namePath: "web-app-api/v1.0",
+                                        configFile: 'k8s/helm/*.yml',
+                                        autoCommit: 'true',
+                                        autoValidate: 'true',
+                                        dataFormat: "yaml"
+                                    )
+                                    echo "Changeset: $changeSetId created"
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 // Validate application code changes (SIMULATED)
                 stage('Code') { 
                     stages {
