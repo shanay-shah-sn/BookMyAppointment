@@ -4,7 +4,7 @@ redis:
   nameOverride: redis-server
   fullnameOverride: redis-server
   cluster:
-    enabled: false
+    enabled: true
   persistence:
     enabled: false
   master:
