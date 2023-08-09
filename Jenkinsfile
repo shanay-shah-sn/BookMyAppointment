@@ -64,6 +64,7 @@ pipeline {
                                         applicationName: "${appName}",
                                         target: 'deployable',
                                         deployableName: "${deployableName}",
+                                        namepath: "web_apiv1.0"
                                         configFile: "${configFilePath}",
                                         autoCommit: 'true',
                                         autoValidate: 'true',
