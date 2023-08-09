@@ -21,7 +21,7 @@ pipeline {
                     */
                     appName = 'BookMyAppointment'
                     deployableName = 'Production'
-                    configFilePath = "k8s/helm/envs/production/*.yaml"
+                    configFilePath = "k8s/helm/envs/production/frontend.yaml"
                     dataFormat = 'yaml'
                 }
                 echo """---- Build Parameters ----
@@ -64,7 +64,6 @@ pipeline {
                                         applicationName: "${appName}",
                                         target: 'deployable',
                                         deployableName: "${deployableName}",
-                                        namepath: "web_apiv1.0",
                                         configFile: "${configFilePath}",
                                         autoCommit: 'true',
                                         autoValidate: 'true',
