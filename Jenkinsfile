@@ -114,8 +114,18 @@ pipeline {
                                     if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
                                         echo "Latest snapshot passed validation"
                                     } else {
-                                        error "Latest snapshot failed validation"
+                                            
+                                            // create tests dir
+                                            sh "mkdir -p ${buildArtifactsPath}/tests"
+                                            // move policy validation results to build artifacts folder
+                                            sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
+                                            // attach policy validation results
+                                            echo ">>>>> Displaying Test results <<<<<"
+                                            junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
+                                            
+                                            error "Latest snapshot failed validation"
                                     }
+
                                 }
                             }
                         }
@@ -194,18 +204,6 @@ pipeline {
                             echo "********************** END Deployment ****************"
                     }
                 }
-        }
-    }
-    // NOTE: attach policy validation results to run (if the snapshot fails validation)
-    post {
-        always {
-            // create tests dir
-            sh "mkdir -p ${buildArtifactsPath}/tests"
-            // move policy validation results to build artifacts folder
-            sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
-            // attach policy validation results
-            echo ">>>>> Displaying Test results <<<<<"
-            junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
         }
     }
 }
