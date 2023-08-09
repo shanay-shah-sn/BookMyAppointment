@@ -205,7 +205,7 @@ pipeline {
             sh "mv ${validationResultsPath} ${buildArtifactsPath}/tests/${validationResultsPath}"
             // attach policy validation results
             echo ">>>>> Displaying Test results <<<<<"
-            //junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
+            junit testResults: "${buildArtifactsPath}/tests/${validationResultsPath}", skipPublishingChecks: true
         }
     }
 }
