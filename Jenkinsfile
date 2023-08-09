@@ -64,7 +64,7 @@ pipeline {
                                     changeSetId = snDevOpsConfigUpload(
                                         applicationName: "${appName}",
                                         target: 'deployable',
-                                        deployableName: "$(deployableName)"
+                                        deployableName: "${deployableName}"
                                         namePath: "web-app-api/v1.0",
                                         configFile: 'k8s/helm/*.yml',
                                         autoCommit: 'true',
