@@ -21,7 +21,7 @@ pipeline {
                     */
                     appName = 'BookMyAppointment'
                     deployableName = 'Production'
-                    configFilePath = "k8s/helm/env/production/*.yaml"
+                    configFilePath = "k8s/helm/envs/production/*.yaml"
                     dataFormat = 'yaml'
                 }
                 echo """---- Build Parameters ----
