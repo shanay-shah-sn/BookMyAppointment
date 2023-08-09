@@ -1,0 +1,36 @@
+redis:
+  usePassword: false
+  svcName: redis-server-master
+  nameOverride: redis-server
+  fullnameOverride: redis-server
+  cluster:
+    enabled: false
+  persistence:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+  slave:
+    persistence:
+      enabled: false
+
+mysql:
+  svcName: mysql-server
+  fullnameOverride: mysql-server
+  root:
+    password: dubbikins
+  db:
+    name: reservation
+    user: keogh
+    password: dubbikins
+  image:
+    repository: mysql
+    tag: 8.0
+  persistence:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+  slave:
+    persistence:
+      enabled: false
