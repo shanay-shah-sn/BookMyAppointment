@@ -67,6 +67,7 @@ pipeline {
                                         namePath: "web-app-api/v1.0",
                                         configFile: "${configFilePath}",
                                         autoCommit: "true",
+                                        autoValidate: "true",
                                         dataFormat: "yaml"
                                     )
                                     echo "Changeset: $changeSetId created"
