@@ -21,7 +21,7 @@ pipeline {
                     */
                     appName = 'BookMyAppointment'
                     deployableName = 'Production'
-                    configFilePath = 'k8s/helm/*.yml' //"k8s/helm/envs/production/frontend.yaml"
+                    configFilePath = 'k8s/helm/envs/production/*.yaml'
                     dataFormat = 'yaml'
                 }
                 echo """---- Build Parameters ----
@@ -62,12 +62,12 @@ pipeline {
                                 script {
                                     changeSetId = snDevOpsConfigUpload(
                                         applicationName: "${appName}",
-                                        target: 'deployable',
+                                        target: "deployable",
                                         deployableName: "${deployableName}",
                                         namePath: "web-app-api/v1.0",
-                                        configFile: 'k8s/helm/*.yml',
-                                        autoCommit: 'true',
-                                        autoValidate: 'true',
+                                        configFile: "${configFilePath}",
+                                        autoCommit: "true",
+                                        autoValidate: "true",
                                         dataFormat: "yaml"
                                     )
                                     echo "Changeset: $changeSetId created"
