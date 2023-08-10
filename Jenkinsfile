@@ -51,12 +51,6 @@ pipeline {
                         echo "Running unit tests..."
                     }
                 }
-                
-                stage('SonarQube analysis') {
-                    steps {
-                        echo "Running code quality analysis..."
-                    }
-                }
             }
         }
         
