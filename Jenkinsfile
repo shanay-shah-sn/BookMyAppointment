@@ -29,21 +29,16 @@ pipeline {
         } 
             
         // Validate code and config data
-        stage('Validate') {    
-            parallel {
+        stage('TEST') {    
+            stages('Code') {
                 // Validate application code changes (SIMULATED)
                 stage('jUnit Test'){ 
                     steps {
                         echo "Running unit tests..."
                     }
                 }
-            }
-        }
-        
-        // Run functional tests
-        stage ('Functional Testing') {
-            parallel {      
-                stage('Selenium API') { 
+                
+                stage('Selenium Test') { 
                     steps {
                         echo "Selenium API..2..3..4"
                         sleep(time:5,unit:"SECONDS")
@@ -54,37 +49,35 @@ pipeline {
                 }
             }
         }
+        
+    
 
         stage ('Deploy') {
             parallel {
                 // Deploy application code and configuration data to production 1 environment
-                stage('Deploy US') {
-                        steps {
-                            script {
-                                    echo "Show exported config data from file name"
-                                    echo " ++++++++++++ BEGIN OF File Content ***************"
-                                    echo " ++++++++++++ END OF File content ***************"
-                                    echo "Exported config data handed off to deployment tool"
-                                    echo "********************** BEGIN Deployment ****************"
-                                    echo "Applying docker image ${dockerImageNameTag}"
-                                    echo "********************** END Deployment ****************"
-                            }
-                        }
+                steps {
+                    script {
+                            echo "Show exported config data from file name"
+                            echo " ++++++++++++ BEGIN OF File Content ***************"
+                            echo " ++++++++++++ END OF File content ***************"
+                            echo "Exported config data handed off to deployment tool"
+                            echo "********************** BEGIN Deployment ****************"
+                            echo "Applying docker image ${dockerImageNameTag}"
+                            echo "********************** END Deployment ****************"
+                    }
                 }
                 
                 // Deploy application code and configuration data to production 2 environment
-                stage('Deploy EMEA') {
-                        steps {
-                            script {
-                                    echo "Show exported config data from file name"
-                                    echo " ++++++++++++ BEGIN OF File Content ***************"
-                                    echo " ++++++++++++ END OF File content ***************"
-                                    echo "Exported config data handed off to deployment tool"
-                                    echo "********************** BEGIN Deployment ****************"
-                                    echo "Applying docker image ${dockerImageNameTag}"
-                                    echo "********************** END Deployment ****************"
-                            }
-                        }
+                steps {
+                    script {
+                            echo "Show exported config data from file name"
+                            echo " ++++++++++++ BEGIN OF File Content ***************"
+                            echo " ++++++++++++ END OF File content ***************"
+                            echo "Exported config data handed off to deployment tool"
+                            echo "********************** BEGIN Deployment ****************"
+                            echo "Applying docker image ${dockerImageNameTag}"
+                            echo "********************** END Deployment ****************"
+                    }
                 }
             }
         }   
