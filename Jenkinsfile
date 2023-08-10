@@ -17,7 +17,7 @@ pipeline {
 
                 }
                 echo """---- Build Parameters ----
-                applicationName: ${appName}
+                applicationName: "BookMyAppointment"
                 """
             }
         }
