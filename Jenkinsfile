@@ -4,27 +4,13 @@ pipeline {
         validationResultsPath = ""
     }
     agent any
-    /**
-    * Jenkins pipline related variables
-    */
-    stages {
-        // Initialize pipeline
-        stage('Initialize') {
-            steps {
-                script {
-                    dockerImageName = "BookMyAppointment/web-app"
-                    buildNumberArtifact = "grefId123"
 
-                }
-                echo """---- Build Parameters ----
-                applicationName: "BookMyAppointment"
-                """
-            }
-        }
-            
+    stages {
         // Build and publish application image
         stage('Build') {      
             steps {
+                dockerImageName = "BookMyAppointment/web-app"
+                buildNumberArtifact = "grefId123"
                 checkout scm    
                 echo "scm checkout successful"
                 
