@@ -9,13 +9,13 @@ pipeline {
         // Build and publish application image
         stage('Build') {      
             steps {
-                dockerImageName = "BookMyAppointment/web-app"
-                buildNumberArtifact = "grefId123"
                 checkout scm    
                 echo "scm checkout successful"
                 
                 script {
                     //dockerImageTag = env.BUILD_NUMBER
+                    dockerImageName = "BookMyAppointment/web-app"
+                    buildNumberArtifact = "grefId123"
                     dockerImageTag = "1.2"
                     dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
 
