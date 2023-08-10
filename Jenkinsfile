@@ -56,7 +56,7 @@ pipeline {
         }
 
         // Deploy application code and configuration data to production environment
-        stage('Deploy to Production') {
+        stage('Deploy') {
                 steps {
                     script {
                             echo "Show exported config data from file name"
