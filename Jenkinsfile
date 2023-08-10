@@ -45,7 +45,7 @@ pipeline {
         // Validate code and config data
         stage('Validate') {    
             // Validate application code changes (SIMULATED)
-            stages {
+            stages('Code') {
                 stage('jUnit Test'){ 
                     steps {
                         echo "Running unit tests..."
