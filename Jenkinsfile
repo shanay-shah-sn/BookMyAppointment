@@ -45,21 +45,19 @@ pipeline {
         // Validate code and config data
         stage('Validate') {    
             // Validate application code changes (SIMULATED)
-            stage('Code') { 
-                stages {
-                    stage('jUnit Test'){ 
-                        steps {
-                            echo "Running unit tests..."
-                        }
+            stages {
+                stage('jUnit Test'){ 
+                    steps {
+                        echo "Running unit tests..."
                     }
-                    
-                    stage('SonarQube analysis') {
-                        steps {
-                            echo "Running code quality analysis..."
-                        }
+                }
+                
+                stage('SonarQube analysis') {
+                    steps {
+                        echo "Running code quality analysis..."
                     }
-                }    
-            }
+                }
+            }    
         }
         
         // Run functional tests
