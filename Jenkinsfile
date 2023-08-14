@@ -53,33 +53,31 @@ pipeline {
     
 
         stage ('Deploy') {
-            parallel {
-                // Deploy application code and configuration data to production 1 environment
-                steps {
-                    script {
-                            echo "Show exported config data from file name"
-                            echo " ++++++++++++ BEGIN OF File Content ***************"
-                            echo " ++++++++++++ END OF File content ***************"
-                            echo "Exported config data handed off to deployment tool"
-                            echo "********************** BEGIN Deployment ****************"
-                            echo "Applying docker image ${dockerImageNameTag}"
-                            echo "********************** END Deployment ****************"
-                    }
-                }
-                
-                // Deploy application code and configuration data to production 2 environment
-                steps {
-                    script {
-                            echo "Show exported config data from file name"
-                            echo " ++++++++++++ BEGIN OF File Content ***************"
-                            echo " ++++++++++++ END OF File content ***************"
-                            echo "Exported config data handed off to deployment tool"
-                            echo "********************** BEGIN Deployment ****************"
-                            echo "Applying docker image ${dockerImageNameTag}"
-                            echo "********************** END Deployment ****************"
-                    }
+            // Deploy application code and configuration data to production 1 environment
+            steps {
+                script {
+                        echo "Show exported config data from file name"
+                        echo " ++++++++++++ BEGIN OF File Content ***************"
+                        echo " ++++++++++++ END OF File content ***************"
+                        echo "Exported config data handed off to deployment tool"
+                        echo "********************** BEGIN Deployment ****************"
+                        echo "Applying docker image ${dockerImageNameTag}"
+                        echo "********************** END Deployment ****************"
                 }
             }
-        }   
+            
+            // Deploy application code and configuration data to production 2 environment
+            steps {
+                script {
+                        echo "Show exported config data from file name"
+                        echo " ++++++++++++ BEGIN OF File Content ***************"
+                        echo " ++++++++++++ END OF File content ***************"
+                        echo "Exported config data handed off to deployment tool"
+                        echo "********************** BEGIN Deployment ****************"
+                        echo "Applying docker image ${dockerImageNameTag}"
+                        echo "********************** END Deployment ****************"
+                }
+            }
+        }       
     }
 }
