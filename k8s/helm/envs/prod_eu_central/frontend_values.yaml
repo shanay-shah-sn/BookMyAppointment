@@ -1,6 +1,6 @@
 
 replicas: 1
-region: eu-central-1
+region: us-east-1
 
 image:
   repository: myrepo
