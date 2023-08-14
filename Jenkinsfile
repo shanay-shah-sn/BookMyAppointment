@@ -60,7 +60,7 @@ pipeline {
                                     appName = 'TestMyApp'
 
                                     // Upload to Production US env
-                                    snDevOpsConfigUpload(
+                                    changeSetId = snDevOpsConfigUpload(
                                          applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_1',
@@ -71,7 +71,7 @@ pipeline {
 
                                     // Upload to Production EU env
                                     // Commit the changeset
-                                    changeSetId = snDevOpsConfigUpload(
+                                    snDevOpsConfigUpload(
                                          applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_EU_2',
@@ -79,6 +79,7 @@ pipeline {
                                          configFile: 'k8s/helm/envs/prod_eu_central/*',
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
+                                         changesetNumber: "${changeSetId}"
                                     )
 
                                     if (changeSetId == null) {
