@@ -12,7 +12,7 @@ imagePullSecrets: ["myregistrykey"]
 service:
   type: NodePort
   port: 80
-  targetPort: 10080
+  targetPort: 8080
   nodePort: 31220
 
 ingress:
