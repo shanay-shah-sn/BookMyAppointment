@@ -64,10 +64,8 @@ pipeline {
                         echo "Applying docker image ${dockerImageNameTag}"
                         echo "********************** END Deployment ****************"
                 }
-            }
             
-            // Deploy application code and configuration data to production 2 environment
-            steps {
+                // Deploy application code and configuration data to production 2 environment
                 script {
                         echo "Show exported config data from file name"
                         echo " ++++++++++++ BEGIN OF File Content ***************"
