@@ -79,6 +79,7 @@ pipeline {
                                          configFile: 'k8s/helm/envs/prod_eu_central/*',
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
+                                         autoValidate: 'true'
                                          changesetNumber: "${changeSetId}"
                                     )
 
@@ -95,12 +96,45 @@ pipeline {
                         stage('Validate') {
                             steps {
                                 script {
-                                    snDevOpsConfigValidate(
-                                         applicationName: "${appName}",
-                                         deployableName: 'Production_US_1',
-                                         markFailed: true,
-                                         showResults: true
+                                    changeSetResults = snDevOpsConfigGetSnapshots(
+                                        applicationName:"${appName}",
+                                        deployableName:"Production_US_1",
+                                        changesetNumber:"${changeSetId}",
+                                        showResults: true,
+                                        markFailed: true
                                     )
+                                    
+                                    if (!changeSetResults) {
+                                        echo "No snapshots were created"
+                                    } else {
+                                        echo "Changeset result : ${changeSetResults}"
+
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+
+                                        changeSetResultsObject.each {
+                                            snapshotName = it.name
+                                            snapshotObject = it
+                                        }
+                                        
+                                        snapshotValidationStatus = snapshotObject.validation
+                                        snapshotPublishedStatus = snapshotObject.published
+
+                                        if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
+                                            echo "Latest snapshot passed validation"
+                                            publishSnapshotResults = snDevOpsConfigPublish(
+                                                applicationName:"${appName}",
+                                                deployableName:"Production_US_1",
+                                                snapshotName: "${snapshotName}"
+                                            )
+    
+                                        } else {
+                                            error "Latest snapshot failed validation"
+                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                            // attach policy validation results
+                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                        }
+                                        
+                                    }
                                 }
                             }
                         }
