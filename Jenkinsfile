@@ -98,8 +98,8 @@ pipeline {
                                     snDevOpsConfigValidate(
                                          applicationName: "${appName}",
                                          deployableName: 'Production_US_1',
-                                         markFailed: 'true',
-                                         showResults: 'true'
+                                         markFailed: true,
+                                         showResults: true
                                     )
                                 }
                             }
