@@ -51,12 +51,7 @@ pipeline {
                         }
                     }                    
                 }
-                
-                stage('Config') {
-                    // No steps
-                }
             }
-            
         }
         
     
