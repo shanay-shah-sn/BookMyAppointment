@@ -61,7 +61,7 @@ pipeline {
 
                                     // Upload to Production US env
                                     snDevOpsConfigUpload(
-                                         applicationName: '${appName}',
+                                         applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_1',
                                          namePath: 'helm_charts',
@@ -72,7 +72,7 @@ pipeline {
                                     // Upload to Production EU env
                                     // Commit the changeset
                                     changeSetId = snDevOpsConfigUpload(
-                                         applicationName: '${appName}',
+                                         applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_EU_2',
                                          namePath: 'helm_charts',
