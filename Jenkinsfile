@@ -55,7 +55,39 @@ pipeline {
                     stages('Config Steps') {
                         stage('Upload') {
                             steps {
-                                echo "upload"
+                                script {
+                                    /* DevOps Config related informations */
+                                    appName = 'TestMyApp'
+
+                                    // Upload to Production US env
+                                    snDevOpsConfigUpload(
+                                         applicationName: '${appName}',
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_1',
+                                         namePath: 'helm_charts',
+                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         dataFormat: 'yaml',
+                                    )
+
+                                    // Upload to Production EU env
+                                    // Commit the changeset
+                                    changeSetId = snDevOpsConfigUpload(
+                                         applicationName: '${appName}',
+                                         target: 'deployable',
+                                         deployableName: 'Production_EU_2',
+                                         namePath: 'helm_charts',
+                                         configFile: 'k8s/helm/envs/prod_eu_central/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                    )
+
+                                    if (changeSetId == null) {
+                                        error "Changeset is not created"
+                                    }
+                                    
+                                    echo "changeSet: $changeSetId created"
+                                    
+                                }
                             }
                         }
 
