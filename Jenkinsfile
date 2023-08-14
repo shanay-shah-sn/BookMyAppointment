@@ -60,7 +60,9 @@ pipeline {
                         }
 
                         stage('Validate') {
-                            echo "validate"
+                            steps {
+                                echo "validate"
+                            }
                         }
                     }
                 }
