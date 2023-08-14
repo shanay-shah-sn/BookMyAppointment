@@ -1,5 +1,5 @@
 
-replicas: 1
+replicas: 11
 region: us-east-1
 
 image:
@@ -12,7 +12,7 @@ imagePullSecrets: ["myregistrykey"]
 service:
   type: NodePort
   port: 80
-  targetPort: 8080
+  targetPort: 10080
   nodePort: 31220
 
 ingress:
