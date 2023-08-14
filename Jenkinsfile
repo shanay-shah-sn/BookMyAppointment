@@ -44,12 +44,25 @@ pipeline {
                             steps {
                                 echo "Selenium API..2..3..4"
                                 sleep(time:5,unit:"SECONDS")
-        
+                                
                                 echo "Selenium UI..2..3..4"
-                                sleep(time:7,unit:"SECONDS")
                             }
                         }
                     }                    
+                }
+
+                stage('Config') {
+                    stages('Config Steps') {
+                        stage('Upload') {
+                            steps {
+                                echo "upload"
+                            }
+                        }
+
+                        stage('Validate') {
+                            echo "validate"
+                        }
+                    }
                 }
             }
         }
