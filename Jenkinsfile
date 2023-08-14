@@ -79,7 +79,7 @@ pipeline {
                                          configFile: 'k8s/helm/envs/prod_eu_central/*',
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
-                                         autoValidate: 'true'
+                                         autoValidate: 'true',
                                          changesetNumber: "${changeSetId}"
                                     )
 
