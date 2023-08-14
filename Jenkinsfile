@@ -30,7 +30,7 @@ pipeline {
             
         // Validate code and config data
         stage('TEST') {    
-            stages('Code') {
+            parallel('Code') {
                 // Validate application code changes (SIMULATED)
                 stage('jUnit Test'){ 
                     steps {
