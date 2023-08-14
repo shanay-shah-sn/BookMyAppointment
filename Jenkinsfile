@@ -128,10 +128,11 @@ pipeline {
                                             )
     
                                         } else {
-                                            error "Latest snapshot failed validation"
                                             validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
                                             // attach policy validation results
                                             junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                            
+                                            error "Latest snapshot failed validation"
                                         }
                                         
                                     }
