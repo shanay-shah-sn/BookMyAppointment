@@ -80,7 +80,7 @@ pipeline {
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
                                          autoValidate: 'true',
-                                         autoPublish: 'true'
+                                         autoPublish: 'true',
                                          changesetNumber: "${changeSetId}"
                                     )
         
