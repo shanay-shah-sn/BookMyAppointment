@@ -14,7 +14,7 @@ pipeline {
                 
                 script {
                     //dockerImageTag = env.BUILD_NUMBER
-                    dockerImageName = "BookMyAppointment/web-app"
+                    dockerImageName = "TestMyApp/web-app"
                     buildNumberArtifact = "grefId123"
                     dockerImageTag = "1.2"
                     dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
