@@ -99,6 +99,8 @@ pipeline {
                                     changeSetResults = snDevOpsConfigGetSnapshots(
                                         applicationName:"${appName}",
                                         changesetNumber:"${changeSetId}",
+                                        showResults: true,
+                                        markFailed: true
                                     )
                                     
                                     if (!changeSetResults) {
