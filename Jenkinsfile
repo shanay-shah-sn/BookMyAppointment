@@ -60,13 +60,13 @@ pipeline {
                                     appName = 'TestMyApp'
         
                                     // Upload to Production US env
-                                    changeSetId = snDevOpsConfig(
+                                    changeSetId = snDevOpsConfigUpload(
                                          applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_1',
                                          namePath: 'helm_charts',
                                          configFile: 'k8s/helm/envs/prod_us_east/*',
-                                         dataFormat: 'yaml',
+                                         dataFormat: 'yaml'
                                     )
         
                                     // Upload to Production EU env
