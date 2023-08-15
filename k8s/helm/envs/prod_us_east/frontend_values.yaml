@@ -1,6 +1,6 @@
 
 replicas: 11
-region: eu-central-1
+region: us-central-1
 
 image:
   repository: mysql
