@@ -98,36 +98,36 @@ pipeline {
                                 script {
                                     changeSetResults = snDevOpsConfigGetSnapshots(
                                         applicationName:"${appName}",
-                                        changesetNumber: "Chset-211" //"${changeSetId}"
+                                        changesetNumber: "${changeSetId}"
                                     )
 
                                     echo "Changeset result : ${changeSetResults}"
                                     if (!changeSetResults) {
                                         echo "No snapshots were created"
                                     } else {
-                                        // def changeSetResultsObject = readJSON text: changeSetResults
-                                        // changeSetResultsObject.each {
-                                        //     snapshotObject = it
-                                        //     snapshotName = snapshotObject.name
-                                        //     snapshotValidationStatus = snapshotObject.validation
-                                        //     snapshotPublishedStatus = snapshotObject.published
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+                                        changeSetResultsObject.each {
+                                            snapshotObject = it
+                                            snapshotName = snapshotObject.name
+                                            snapshotValidationStatus = snapshotObject.validation
+                                            snapshotPublishedStatus = snapshotObject.published
         
-                                        //     if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
-                                        //     echo "Latest snapshot passed validation"
-                                        //     publishSnapshotResults = snDevOpsConfigPublish(
-                                        //         applicationName:"${appName}",
-                                        //         snapshotName: "${snapshotName}"
-                                        //     )
+                                            if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
+                                            echo "Latest snapshot passed validation"
+                                            publishSnapshotResults = snDevOpsConfigPublish(
+                                                applicationName:"${appName}",
+                                                snapshotName: "${snapshotName}"
+                                            )
         
-                                        //     } else {
-                                        //         validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                        //         // attach policy validation results
-                                        //         junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                            } else {
+                                                validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                                // attach policy validation results
+                                                junit testResults: "${validationResultsPath}", skipPublishingChecks: true
                                                 
-                                        //         error "Latest snapshot failed validation"
-                                        //     }
+                                                error "Latest snapshot failed validation"
+                                            }
         
-                                        // }
+                                        }
                                                                         
                                     }
                                 }
