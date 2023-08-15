@@ -3,7 +3,7 @@ replicas: 11
 region: eu-central-1
 
 image:
-  repository: myrepo
+  repository: mysql
   tag: prod
   pullPolicy: Always
 
