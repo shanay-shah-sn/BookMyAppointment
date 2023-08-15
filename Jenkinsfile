@@ -60,7 +60,7 @@ pipeline {
                                     appName = 'TestMyApp'
         
                                     // Upload to Production US env
-                                    changeSetId = snDevOpsConfigUpload(
+                                    changeSetId = snDevOpsConfig(
                                          applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_1',
@@ -70,8 +70,8 @@ pipeline {
                                     )
         
                                     // Upload to Production EU env
-                                    // Commit the changeset
-                                    snDevOpsConfigUpload(
+                                    // Commit the changeset, Validate & Get Validation Results
+                                    changeSetResults = snDevOpsConfig(
                                          applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_EU_2',
@@ -80,14 +80,13 @@ pipeline {
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
                                          autoValidate: 'true',
+                                         autoPublish: 'true'
                                          changesetNumber: "${changeSetId}"
                                     )
         
-                                    if (changeSetId == null) {
-                                        error "Changeset is not created"
+                                    if (!changeSetResults == null) {
+                                         error "Upload failure"
                                     }
-                                    
-                                    echo "changeSet: $changeSetId created"
         
                                 }
                             }
@@ -96,15 +95,6 @@ pipeline {
                         stage('Validate') {
                             steps {
                                 script {
-                                    changeSetResults = snDevOpsConfigGetSnapshots(
-                                        applicationName:"${appName}",
-                                        changesetNumber: "${changeSetId}"
-                                    )
-
-                                    echo "Changeset result : ${changeSetResults}"
-                                    if (!changeSetResults) {
-                                        echo "No snapshots were created"
-                                    } else {
                                         def changeSetResultsObject = readJSON text: changeSetResults
                                         changeSetResultsObject.each {
                                             snapshotObject = it
@@ -113,18 +103,13 @@ pipeline {
                                             snapshotPublishedStatus = snapshotObject.published
         
                                             if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
-                                            echo "Latest snapshot passed validation"
-                                            publishSnapshotResults = snDevOpsConfigPublish(
-                                                applicationName:"${appName}",
-                                                snapshotName: "${snapshotName}"
-                                            )
-        
+                                                echo "Latest snapshot passed validation for ${snapshotName}"
                                             } else {
                                                 validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
                                                 // attach policy validation results
                                                 junit testResults: "${validationResultsPath}", skipPublishingChecks: true
                                                 
-                                                error "Latest snapshot failed validation"
+                                                error "Latest snapshot failed validation for ${snapshotName}"
                                             }
         
                                         }
