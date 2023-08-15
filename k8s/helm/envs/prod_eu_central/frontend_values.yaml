@@ -1,5 +1,5 @@
 
-replicas: 12
+replicas: 13
 region: us-central-1
 
 image:
