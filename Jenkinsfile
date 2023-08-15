@@ -93,7 +93,7 @@ pipeline {
                                     echo "Register changeset: ${changeSetId} to pipeline"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(
                                         applicationName: "${appName}",
-                                        changesetNumber: "${changeSetId}"
+                                        changesetNumber: "Chset-299"
                                     )
                                     echo "Pipeline registration result: ${changeSetRegResult}"
                                     
