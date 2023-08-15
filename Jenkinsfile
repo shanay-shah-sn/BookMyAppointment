@@ -58,7 +58,7 @@ pipeline {
                                 script {
                                     /* DevOps Config related informations */
                                     appName = 'TestMyApp'
-        
+
                                     // Upload to Production US env
                                     changeSetId = snDevOpsConfigUpload(
                                          applicationName: "${appName}",
@@ -68,7 +68,7 @@ pipeline {
                                          configFile: 'k8s/helm/envs/prod_us_east/*',
                                          dataFormat: 'yaml',
                                     )
-        
+
                                     // Upload to Production EU env
                                     // Commit the changeset
                                     snDevOpsConfigUpload(
@@ -82,53 +82,59 @@ pipeline {
                                          autoValidate: 'true',
                                          changesetNumber: "${changeSetId}"
                                     )
-        
+
                                     if (changeSetId == null) {
                                         error "Changeset is not created"
                                     }
                                     
                                     echo "changeSet: $changeSetId created"
-        
+                                    
                                 }
                             }
                         }
-        
+
                         stage('Validate') {
                             steps {
                                 script {
                                     changeSetResults = snDevOpsConfigGetSnapshots(
                                         applicationName:"${appName}",
-                                        changesetNumber:"${changeSetId}"
+                                        deployableName:"Production_US_1",
+                                        changesetNumber:"${changeSetId}",
+                                        showResults: true,
+                                        markFailed: true
                                     )
-
-                                    echo "Changeset result : ${changeSetResults}"
+                                    
                                     if (!changeSetResults) {
                                         echo "No snapshots were created"
                                     } else {
-                                        // def changeSetResultsObject = readJSON text: changeSetResults
-                                        // changeSetResultsObject.each {
-                                        //     snapshotObject = it
-                                        //     snapshotName = snapshotObject.name
-                                        //     snapshotValidationStatus = snapshotObject.validation
-                                        //     snapshotPublishedStatus = snapshotObject.published
-        
-                                        //     if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
-                                        //     echo "Latest snapshot passed validation"
-                                        //     publishSnapshotResults = snDevOpsConfigPublish(
-                                        //         applicationName:"${appName}",
-                                        //         snapshotName: "${snapshotName}"
-                                        //     )
-        
-                                        //     } else {
-                                        //         validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                        //         // attach policy validation results
-                                        //         junit testResults: "${validationResultsPath}", skipPublishingChecks: true
-                                                
-                                        //         error "Latest snapshot failed validation"
-                                        //     }
-        
-                                        // }
-                                                                        
+                                        echo "Changeset result : ${changeSetResults}"
+
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+
+                                        changeSetResultsObject.each {
+                                            snapshotName = it.name
+                                            snapshotObject = it
+                                        }
+                                        
+                                        snapshotValidationStatus = snapshotObject.validation
+                                        snapshotPublishedStatus = snapshotObject.published
+
+                                        if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
+                                            echo "Latest snapshot passed validation"
+                                            publishSnapshotResults = snDevOpsConfigPublish(
+                                                applicationName:"${appName}",
+                                                deployableName:"Production_US_1",
+                                                snapshotName: "${snapshotName}"
+                                            )
+    
+                                        } else {
+                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                            // attach policy validation results
+                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                            
+                                            error "Latest snapshot failed validation"
+                                        }
+                                        
                                     }
                                 }
                             }
