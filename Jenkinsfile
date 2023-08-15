@@ -88,11 +88,12 @@ pipeline {
                                     //      error "Upload failure"
                                     // }
                                     // echo "changeSetResultsObject: ${changeSetResults}"
-                                    
+
+                                    changeSetId = "Chset-217"
                                     echo "Register changeset: ${changeSetId} to pipeline"
                                     changeSetRegResult = snDevOpsConfigRegisterPipeline(
                                         applicationName: "${appName}",
-                                        changesetNumber: "Chset-217"
+                                        changesetNumber: "${changeSetId}"
                                     )
                                     echo "Pipeline registration result: ${changeSetRegResult}"
                                     
