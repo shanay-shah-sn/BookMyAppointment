@@ -87,7 +87,7 @@ pipeline {
                                     if (!changeSetResults == null) {
                                          error "Upload failure"
                                     }
-        
+                                    echo "changeSetResultsObject: ${changeSetResults}"
                                 }
                             }
                         }
