@@ -1,5 +1,5 @@
 redis:
-  usePassword: true
+  usePassword: false
   svcName: redis-server-master
   nameOverride: redis-server
   fullnameOverride: redis-server
