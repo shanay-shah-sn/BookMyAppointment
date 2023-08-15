@@ -98,7 +98,7 @@ pipeline {
                                 script {
                                     changeSetResults = snDevOpsConfigGetSnapshots(
                                         applicationName:"${appName}",
-                                        changesetNumber:"${changeSetId}"
+                                        changesetNumber: "Chset-211" //"${changeSetId}"
                                     )
 
                                     echo "Changeset result : ${changeSetResults}"
