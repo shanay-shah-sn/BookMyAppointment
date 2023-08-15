@@ -59,43 +59,36 @@ pipeline {
                                     /* DevOps Config related informations */
                                     appName = 'TestMyApp'
         
-                                    // // Upload to Production US env
-                                    // changeSetId = snDevOpsConfigUpload(
-                                    //      applicationName: "${appName}",
-                                    //      target: 'deployable',
-                                    //      deployableName: 'Production_US_1',
-                                    //      namePath: 'helm_charts',
-                                    //      configFile: 'k8s/helm/envs/prod_us_east/*',
-                                    //      dataFormat: 'yaml'
-                                    // )
-        
-                                    // // Upload to Production EU env
-                                    // // Commit the changeset, Validate & Get Validation Results
-                                    // changeSetResults = snDevOpsConfig(
-                                    //      applicationName: "${appName}",
-                                    //      target: 'deployable',
-                                    //      deployableName: 'Production_EU_2',
-                                    //      namePath: 'helm_charts',
-                                    //      configFile: 'k8s/helm/envs/prod_eu_central/*',
-                                    //      dataFormat: 'yaml',
-                                    //      autoCommit: 'true',
-                                    //      autoValidate: 'true',
-                                    //      autoPublish: 'true',
-                                    //      changesetNumber: "${changeSetId}"
-                                    // )
-        
-                                    // if (!changeSetResults == null) {
-                                    //      error "Upload failure"
-                                    // }
-                                    // echo "changeSetResultsObject: ${changeSetResults}"
-
-                                    changeSetId = "Chset-217"
-                                    echo "Register changeset: ${changeSetId} to pipeline"
-                                    changeSetRegResult = snDevOpsConfigRegisterPipeline(
-                                        applicationName: "${appName}",
-                                        changesetNumber: "Chset-299"
+                                    // Upload to Production US env
+                                    changeSetId = snDevOpsConfigUpload(
+                                         applicationName: "${appName}",
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_1',
+                                         namePath: 'helm_charts',
+                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         dataFormat: 'yaml'
                                     )
-                                    echo "Pipeline registration result: ${changeSetRegResult}"
+        
+                                    // Upload to Production EU env
+                                    // Commit the changeset, Validate & Get Validation Results
+                                    changeSetResults = snDevOpsConfig(
+                                         applicationName: "${appName}",
+                                         target: 'deployable',
+                                         deployableName: 'Production_EU_2',
+                                         namePath: 'helm_charts',
+                                         configFile: 'k8s/helm/envs/prod_eu_central/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                         autoValidate: 'true',
+                                         autoPublish: 'true',
+                                         changesetNumber: "${changeSetId}"
+                                    )
+        
+                                    if (!changeSetResults == null) {
+                                         error "Upload failure"
+                                    }
+                                    echo "changeSetResultsObject: ${changeSetResults}"
+
                                     
                                 }
                             }
