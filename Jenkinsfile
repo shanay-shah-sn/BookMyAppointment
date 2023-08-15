@@ -98,6 +98,7 @@ pipeline {
                                 script {
                                     changeSetResults = snDevOpsConfigGetSnapshots(
                                         applicationName:"${appName}",
+                                        deployableName:"Production_US_1",
                                         changesetNumber:"${changeSetId}",
                                         showResults: true,
                                         markFailed: true
