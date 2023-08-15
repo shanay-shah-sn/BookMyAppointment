@@ -19,11 +19,11 @@ pipeline {
                     dockerImageTag = "1.2"
                     dockerImageNameTag = "${dockerImageName}" + ":" + "${dockerImageTag}"
 
-                    snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
-                    echo "Docker image artifact: ${dockerImageNameTag} "
-                    echo "snDevopsArtifactPayload: ${snDevopsArtifactPayload} "
+                    // snDevopsArtifactPayload = '{"artifacts": [{"name": "' + dockerImageName + '",  "version": "' + "${dockerImageTag}" + '", "semanticVersion": "' + "0.1.${dockerImageTag}"+ '","repositoryName": "' + dockerImageName+ '"}, ],"stageName":"Build image","branchName": "main"}'  ;
+                    // echo "Docker image artifact: ${dockerImageNameTag} "
+                    // echo "snDevopsArtifactPayload: ${snDevopsArtifactPayload} "
 
-                    snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
+                    // snDevOpsArtifact(artifactsPayload:snDevopsArtifactPayload)
                 }
             }
         } 
