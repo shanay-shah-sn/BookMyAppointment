@@ -98,6 +98,7 @@ pipeline {
                             steps {
                                 script {
                                     def changeSetResultsObject = readJSON text: changeSetResults
+                                    validationFailure = false
                                     changeSetResultsObject.each {
                                         snapshotObject = it
                                         snapshotName = snapshotObject.name
@@ -107,15 +108,17 @@ pipeline {
                                         if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
                                             echo "Latest snapshot passed validation for ${snapshotName}"
                                         } else {
+                                            validationFailure = true
                                             validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
                                             // attach policy validation results
                                             junit testResults: "${validationResultsPath}", skipPublishingChecks: true
                                             
-                                            error "Latest snapshot failed validation for ${snapshotName}"
                                         }
-    
                                     }
-                                                                        
+
+                                    if (validationFailure)
+                                        error "Latest snapshot failed validation for ${snapshotName}"
+                                
                                 }
                             }
                         }
