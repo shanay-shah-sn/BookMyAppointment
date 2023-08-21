@@ -1,10 +1,11 @@
-mysql:
-  svcName: mysql-server
-  db:
-    name: reservation
-    user: keogh
-    password: dubbikins
-  image:
-    repository: mysql
-    tag: 8.0
+svcName: mysql-server
+
+db:
+  name: reservation
+  user: keogh
+  password: dubbikins
+
+image:
+  repository: mysql
+  tag: 8.0
 
