@@ -57,7 +57,7 @@ pipeline {
                             steps {
                                 script {
                                     /* DevOps Config related informations */
-                                    appName = 'BookMyAppointment'
+                                    appName = 'TestMyApp'
         
                                     // Upload to Production US env
                                     changeSetId = snDevOpsConfigUpload(
