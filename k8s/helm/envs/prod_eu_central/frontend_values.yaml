@@ -1,7 +1,7 @@
 
 
 region: eu-central-1
-replicas: 15
+replicas: 11
 
 image:
   registry: k8s.servicenow.io
