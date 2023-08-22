@@ -98,26 +98,23 @@ pipeline {
                             steps {
                                 script {
                                     def changeSetResultsObject = readJSON text: changeSetResults
-                                    validationFailure = false
+                                    failPipeline = false
                                     changeSetResultsObject.each {
-                                        snapshotObject = it
-                                        snapshotName = snapshotObject.name
-                                        snapshotValidationStatus = snapshotObject.validation
-                                        snapshotPublishedStatus = snapshotObject.published
+                                        snapshotName = it.name
+                                        validationStatus = it.validation
+                                        
+                                        // attach policy validation results
+                                        validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                        junit testResults: "${validationResultsPath}", skipPublishingChecks: true
     
-                                        if(snapshotObject.validation == "passed" || snapshotObject.validation == "passed_with_exception") {
-                                            echo "Latest snapshot passed validation for ${snapshotName}"
-                                        } else {
-                                            validationFailure = true
-                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                            // attach policy validation results
-                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
-                                            
+                                        if(validationStatus == "failed") {
+                                            failPipeline = true;
+                                            echo "Latest snapshot failed validation for ${snapshotName}"
                                         }
                                     }
 
-                                    if (validationFailure)
-                                        error "Latest snapshot failed validation for ${snapshotName}"
+                                    if (failPipeline)
+                                        error "Latest snapshot failed validation"
                                 
                                 }
                             }
