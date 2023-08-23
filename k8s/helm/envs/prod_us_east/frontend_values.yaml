@@ -3,7 +3,7 @@ region: us-east-1
 replicas: 10
 
 image:
-  registry: unkown.servicenow.io
+  registry: k8s.servicenow.io
   repository: bookmyapp
   tag: dev
   pullPolicy: Always
@@ -12,7 +12,7 @@ service:
   type: NodePort
   port: 80
   targetPort: 8080
-  nodePort: 8081
+  nodePort: 32000
 
 resources: 
   limits:
