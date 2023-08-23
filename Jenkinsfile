@@ -30,25 +30,23 @@ pipeline {
             
         // Validate code and config data
         stage('TEST') {    
-                stage('Code') {
-                    stages('Code Steps') {
-                        // Validate application code changes (SIMULATED)
-                        stage('jUnit Test'){ 
-                            steps {
-                                echo "Running unit tests..."
-                            }
+                stages('Code Steps') {
+                    // Validate application code changes (SIMULATED)
+                    stage('jUnit Test'){ 
+                        steps {
+                            echo "Running unit tests..."
                         }
-                        
-                        stage('Selenium Test') { 
-                            steps {
-                                echo "Selenium API..2..3..4"
-                                sleep(time:5,unit:"SECONDS")
-                                
-                                echo "Selenium UI..2..3..4"
-                            }
+                    }
+                    
+                    stage('Selenium Test') { 
+                        steps {
+                            echo "Selenium API..2..3..4"
+                            sleep(time:5,unit:"SECONDS")
+                            
+                            echo "Selenium UI..2..3..4"
                         }
-                    }                    
-                }
+                    }
+                }                    
         }
         
         
