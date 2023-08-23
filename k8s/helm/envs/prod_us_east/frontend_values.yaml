@@ -1,6 +1,6 @@
 
 region: us-east-1
-replicas: 4
+replicas: 5
 
 image:
   registry: unkown.servicenow.io
