@@ -28,11 +28,12 @@ pipeline {
             }
         } 
             
-        // Validate code and config data
-        stage('TEST') {    
+        // Validate Test
+        stage('Test') {
+            parallel {
                 stages('Code Steps') {
                     // Validate application code changes (SIMULATED)
-                    stage('jUnit Test'){ 
+                    stage('jUnit Test') { 
                         steps {
                             echo "Running unit tests..."
                         }
@@ -46,11 +47,11 @@ pipeline {
                             echo "Selenium UI..2..3..4"
                         }
                     }
-                }                    
-        }
-        
-        
-    
+                }
+            }
+            
+        }                    
+
 
         stage ('Deploy') {
             // Deploy application code and configuration data to production 1 environment
