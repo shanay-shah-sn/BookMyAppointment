@@ -86,7 +86,7 @@ pipeline {
 
                             echo "ChangesetResults: ${changeSetResults}"
 
-                            def changeResultsObject = readJSON test: changeSetResults
+                            def changeResultsObject = readJSON text: changeSetResults
                             changeSetResultsObject.each {
                                 snapshotName = it.name
                                 sanpshotValidationStatus = it.validation
