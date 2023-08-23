@@ -86,7 +86,7 @@ pipeline {
 
                             echo "ChangesetResults: ${changeSetResults}"
 
-                            def changeResultsObject = readJSON text: changeSetResults
+                            def changeSetResultsObject = readJSON text: changeSetResults
                             changeSetResultsObject.each {
                                 snapshotName = it.name
                                 sanpshotValidationStatus = it.validation
@@ -132,7 +132,7 @@ pipeline {
     post {
         always {
             // attach policy validation results
-            junit testResults: "**/*_${currentBuild.projectName}_${currentBuild.number}.xml"
+            junit testResults: "**/*_${currentBuild.projectName}_${currentBuild.number}.xml", skipPublishingChecks: true
         }
     }
 
