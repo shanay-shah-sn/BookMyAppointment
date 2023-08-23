@@ -81,11 +81,4 @@ pipeline {
         }       
     }
 
-   post {
-      always {
-        // attach policy validation results
-        junit testResults: "**/*_${currentBuild.projectName}_${currentBuild.number}.xml", skipPublishingChecks: true
-      }
-   } 
-
 }
