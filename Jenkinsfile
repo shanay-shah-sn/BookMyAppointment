@@ -85,6 +85,16 @@ pipeline {
                             }
 
                             echo "ChangesetResults: ${changeSetResults}"
+
+                            def changeResultsObject = readJSON test: changeSetResults
+                            changeSetResultsObject.each {
+                                snapshotName = it.name
+                                sanpshotValidationStatus = it.validation
+
+                                if (snapshotValidatonStatus) {
+                                    error "Latest snapshot failed validation for ${snapshotName}"
+                                }
+                            }
                         }
                     }
                 }
@@ -117,6 +127,13 @@ pipeline {
                 }
             }
         }       
+    }
+
+    post {
+        always {
+            // attach policy validation results
+            junit testResults: "**/*_${currentBuild.projectName}_$(cuurentBuild.number).xml"
+        }
     }
 
 }
