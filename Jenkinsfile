@@ -50,6 +50,44 @@ pipeline {
                         }
                     }   
                 }
+
+                stage('Config') {
+                    steps {
+                        script {
+
+                            // DevOps Config related information
+                            appName = "BookMyAppointment"
+
+                            // Upload to Production US environment
+                            changesetId = snDevOpsConfigUpload(
+                                 applicationName: "${appName}",
+                                 target: 'deployable',
+                                 deployableName: 'Production_US_EAST',
+                                 namePath: 'helm-charts',
+                                 configFile: 'k8s/helm/envs/prod_us_east/*',
+                                 dataFormat: 'yaml',
+                            )
+
+                            // Upload to Production EU environment
+                            // Commit the changes and run the validations
+                            changeSetResults = snDevOpsConfig(
+                                 applicationName: "${appName}",
+                                 target: 'deployable',
+                                 deployableName: 'Production_EU_CENTRAL',
+                                 namePath: 'helm-charts',
+                                 configFile: 'k8s/helm/envs/prod_eu_central/*',
+                                 dataFormat: 'yaml',
+                                 changesetNumber: "${changesetId}"
+                            )
+
+                            if (!changeSetResults) {
+                                error "Config Upload failed"
+                            }
+
+                            echo "ChangesetResults: ${changeSetResults}"
+                        }
+                    }
+                }
             }   
         }                    
 
