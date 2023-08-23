@@ -51,7 +51,49 @@ pipeline {
                     }   
                 }
 
-            }   
+
+                stage('Config') {
+
+                    // Upload data to ServiceNow DevOps Config
+                    appName = "BookMyAppointment"
+
+                    changeSetResults = snDevOpsConfig(
+                         applicationName: "${appName}",
+                         target: 'deployable',
+                         deployableName: 'Production_US_EAST',
+                         namePath: 'helm-charts',
+                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                         dataFormat: 'yaml',
+                         autoCommit: 'true',
+                         autoValidate: 'true',
+                         autoPublish: 'true'
+                    )
+    
+                    if (!changeSetResults) {
+                        echo "No snapshots were created"
+                    } else {
+                        echo "Changeset result : ${changeSetResults}"
+
+                        def changeSetResultsObject = readJSON text: changeSetResults
+
+                        changeSetResultsObject.each {
+                            snapshotName = it.name
+                            snapshotValidationStatus = it.validation
+                            
+                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+
+                            
+                            if (snapshotValidationStatus == "failed") {
+                                error "Latest validation failed for ${snapshotName}"
+                            }
+                        }
+
+                    }
+                    
+                }
+            }
+
+            
         }                    
 
 
@@ -80,5 +122,13 @@ pipeline {
                 }
             }
         }       
+    }
+
+    // NOTE: attach snapshot validation results to run (if the snapshot fails validation)
+    post {
+        always {
+            // attach policy validation results
+            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+        }
     }
 }
