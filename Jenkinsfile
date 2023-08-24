@@ -50,6 +50,50 @@ pipeline {
                         }
                     }   
                 }
+
+                stage('Config') {
+                    stages('Config Steps') {
+                        
+                        stage('Validate') {
+                            steps {
+                                script{
+
+                                    appName = "BookMyAppointment"
+                                    changeSetResults = snDevOpsConfig(
+                                         applicationName: ${appName},
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_EAST',
+                                         namePath: 'helm-charts',
+                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                         autoValidate: 'true',
+                                         autoPublish: 'true'
+                                    )
+
+                                     if (!changeSetResults) {
+                                          echo "No snapshots were created"
+                                       } else {
+                            	       def changeSetResultsObject = readJSON text: changeSetResults
+                            
+                            	       changeSetResultsObject.each {
+                                              snapshotName = it.name
+                                              snapshotValidationStatus = it.validation
+
+                                              // Attach policy validation results to pipeline build
+                                              validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                              junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+
+                                              if (snapshotValidationStatus == "failed") {
+                                                  error "Latest snapshot validation failed for ${snapshotName}"
+                                              }
+
+                            	       }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             
