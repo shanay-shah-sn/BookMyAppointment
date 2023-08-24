@@ -52,15 +52,15 @@ pipeline {
                 }
 
                 stage('Config') {
-                    stages('Config Steps') {
-                        
-                        stage('Validate') {
+                    stages('Config steps') {
+                        // Validate config data in DevOps Config
+                        stage("Validate") {
                             steps {
                                 script{
-
                                     appName = "BookMyAppointment"
-                                    changeSetResults = snDevOpsConfig(
-                                         applicationName: ${appName},
+                                    
+                                    changeSetResults = snDevOpsConfig (
+                                         applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_EAST',
                                          namePath: 'helm-charts',
@@ -71,33 +71,35 @@ pipeline {
                                          autoPublish: 'true'
                                     )
 
-                                     if (!changeSetResults) {
-                                          echo "No snapshots were created"
-                                       } else {
-                            	       def changeSetResultsObject = readJSON text: changeSetResults
-                            
-                            	       changeSetResultsObject.each {
-                                              snapshotName = it.name
-                                              snapshotValidationStatus = it.validation
+                                    if (changeSetResults == null) {
+                                        echo "No snapshots were created"
+                                    } else {
+                                        echo "ChangeSetResults ${changeSetResults}"
 
-                                              // Attach policy validation results to pipeline build
-                                              validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                              junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+    
+                                        changeSetResultsObject.each {
+                                            snapshotName = it.name
+                                            snapshotValidationStatus = it.validation
 
-                                              if (snapshotValidationStatus == "failed") {
-                                                  error "Latest snapshot validation failed for ${snapshotName}"
-                                              }
+                                            //NOTE: attach snapshot validation results to run (if the snapshot fails validation)
+                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                            
+                                            if (snapshotValidationStatus == "failed") {
+                                                error "Latest Validation step failed for ${snapshotName}"
+                                            }
+                                            
+                                        }
+                                        
+                                    }
 
-                            	       }
-                                     }
                                 }
                             }
                         }
                     }
                 }
             }
-
-            
         }                    
 
 
