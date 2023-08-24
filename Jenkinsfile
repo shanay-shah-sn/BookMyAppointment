@@ -50,55 +50,6 @@ pipeline {
                         }
                     }   
                 }
-
-                stage('Config') {
-                    stages('Config steps') {
-                        // Validate config data in DevOps Config
-                        stage("Validate") {
-                            steps {
-                                script{
-                                    appName = "BookMyAppointment"
-                                    
-                                    changeSetResults = snDevOpsConfig (
-                                         applicationName: "${appName}",
-                                         target: 'deployable',
-                                         deployableName: 'Production_US_EAST',
-                                         namePath: 'helm-charts',
-                                         configFile: 'k8s/helm/envs/prod_us_east/*',
-                                         dataFormat: 'yaml',
-                                         autoCommit: 'true',
-                                         autoValidate: 'true',
-                                         autoPublish: 'true'
-                                    )
-
-                                    if (changeSetResults == null) {
-                                        echo "No snapshots were created"
-                                    } else {
-                                        echo "ChangeSetResults ${changeSetResults}"
-
-                                        def changeSetResultsObject = readJSON text: changeSetResults
-    
-                                        changeSetResultsObject.each {
-                                            snapshotName = it.name
-                                            snapshotValidationStatus = it.validation
-
-                                            //NOTE: attach snapshot validation results to run (if the snapshot fails validation)
-                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
-                                            
-                                            if (snapshotValidationStatus == "failed") {
-                                                error "Latest Validation step failed for ${snapshotName}"
-                                            }
-                                            
-                                        }
-                                        
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }                    
 
