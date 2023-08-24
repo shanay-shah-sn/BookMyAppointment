@@ -135,7 +135,8 @@ pipeline {
     post {
         always {
             // attach policy validation results
-            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+            if (validationResultsPath)
+                junit testResults: "${validationResultsPath}", skipPublishingChecks: true
         }
     }
 }
