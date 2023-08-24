@@ -1,9 +1,13 @@
 
-region: us-east-1
-replicas: 10
+region: eu-central-1
+
+# Ensure at least 5 running replicas of the application in the event that some replica fails.
+# Autoscale based on the amount of CPU load the node is experiencing.
+replicas: 2
 
 image:
-  registry: k8s.servicenow.io
+  # CIS Control: Only Allow Access to Authorized Cloud Storage or Email Providers
+  registry: unkown.servicenow.io
   repository: bookmyapp
   tag: dev
   pullPolicy: Always
@@ -12,7 +16,8 @@ service:
   type: NodePort
   port: 80
   targetPort: 8080
-  nodePort: 32000
+  # Ensure approved ports and protocol for external traffic
+  nodePort: 31000
 
 resources: 
   limits:
@@ -21,4 +26,3 @@ resources:
   requests:
     cpu: 100m
     memory: 256Mi
-
