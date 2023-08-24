@@ -83,7 +83,9 @@ pipeline {
                                             snapshotName = it.name
                                             snapshotValidationStatus = it.validation
 
+                                            //NOTE: attach snapshot validation results to run (if the snapshot fails validation)
                                             validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
                                             
                                             if (snapshotValidationStatus == "failed") {
                                                 error "Latest Validation step failed for ${snapshotName}"
@@ -131,15 +133,6 @@ pipeline {
         }       
     }
 
-    // NOTE: attach snapshot validation results to run (if the snapshot fails validation)
-    post {
-        always {
-            // attach policy validation results
-            script {
-                if (validationResultsPath)
-                    junit testResults: "${validationResultsPath}", skipPublishingChecks: true
-            }
+    
 
-        }
-    }
 }
