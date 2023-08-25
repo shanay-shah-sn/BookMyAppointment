@@ -51,6 +51,34 @@ pipeline {
                     }   
                 }
 
+                stage('Config') {
+                    stages('Config Steps') {
+                        stage ("Upload") {
+                            steps {
+                                script {
+                                    changeSetResults = snDevOpsConfig(
+                                         applicationName: 'BookMyAppointment',
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_EAST',
+                                         namePath: 'helm-charts',
+                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                         autoValidate: 'true',
+                                         autoPublish: 'true'
+                                    )
+
+                                    if (changeSetResults == null) {
+                                        echo "No snapshots were created"
+                                    }
+                                    else {
+                                        echo "ChangeSetResults: ${changeSetResults}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }                    
 
