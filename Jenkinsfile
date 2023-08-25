@@ -75,6 +75,24 @@ pipeline {
                                         echo "No new snasphots were created"
                                     } else {
                                         echo "ChangeSetResults: ${changeSetResults}"
+
+                                        def changeSetResultsObject = readJSON text: changeSetResults
+
+                                        changeSetResultsObject.each {
+                                            snapshotName = it.name
+                                            snapshotValidationStatus = it.validation
+
+                                            // Set path to snapshot validation results file
+                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
+                                            // attach policy validation results
+                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
+                                    
+                                            if (snapshotValidationStatus == "failed") {
+                                                error "Latest Validation failed for ${snapshotName}"
+                                            }
+                                        }
+                                        
+
                                     }
                                 }
                             }
