@@ -60,7 +60,7 @@ pipeline {
                                     appName = "BookMyAppointment"
                                     
                                     changeSetResults = snDevOpsConfig(
-                                         applicationName: ${appName},
+                                         applicationName: "${appName}",
                                          target: 'deployable',
                                          deployableName: 'Production_US_EAST',
                                          namePath: 'helm-charts',
