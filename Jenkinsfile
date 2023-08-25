@@ -51,54 +51,6 @@ pipeline {
                     }   
                 }
 
-                stage('Config') {
-                    stages('Config Stages') {
-                        stage('Policy Validation') {
-                            steps {
-                                script {
-
-                                    appName = "BookMyAppointment"
-                                    
-                                    changeSetResults = snDevOpsConfig(
-                                         applicationName: "${appName}",
-                                         target: 'deployable',
-                                         deployableName: 'Production_US_EAST',
-                                         namePath: 'helm-charts',
-                                         configFile: 'k8s/helm/envs/prod_us_east/*',
-                                         dataFormat: 'yaml',
-                                         autoCommit: 'true',
-                                         autoValidate: 'true',
-                                         autoPublish: 'true'
-                                    )
-
-                                    if (changeSetResults == null) {
-                                        echo "No new snasphots were created"
-                                    } else {
-                                        echo "ChangeSetResults: ${changeSetResults}"
-
-                                        def changeSetResultsObject = readJSON text: changeSetResults
-
-                                        changeSetResultsObject.each {
-                                            snapshotName = it.name
-                                            snapshotValidationStatus = it.validation
-
-                                            // Set path to snapshot validation results file
-                                            validationResultsPath = "${snapshotName}_${currentBuild.projectName}_${currentBuild.number}.xml"
-                                            // attach policy validation results
-                                            junit testResults: "${validationResultsPath}", skipPublishingChecks: true
-                                    
-                                            if (snapshotValidationStatus == "failed") {
-                                                error "Latest Validation failed for ${snapshotName}"
-                                            }
-                                        }
-                                        
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }                    
 
