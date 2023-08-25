@@ -50,6 +50,37 @@ pipeline {
                         }
                     }   
                 }
+
+                stage('Config') {
+                    stages('Config Stages') {
+                        stage('Policy Validation') {
+                            steps {
+                                script {
+
+                                    appName = "BookMyAppointment"
+                                    
+                                    changeSetResults = snDevOpsConfig(
+                                         applicationName: ${appName},
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_EAST',
+                                         namePath: 'helm-charts',
+                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                         autoValidate: 'true',
+                                         autoPublish: 'true'
+                                    )
+
+                                    if (changeSetResults == null) {
+                                        echo "No new snasphots were created"
+                                    } else {
+                                        echo "ChangeSetResults: ${changeSetResults}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }                    
 
