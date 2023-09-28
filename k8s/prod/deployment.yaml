@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+    labels:
+        app: frontend
+    name: frontend
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: frontend
+    template:
+        metadata:
+            labels:
+                app: frontend
+        spec:
+            containers:
+            - image: magalixcorp/sample-api:v1
+              imagePullPolicy: IfNotPresent
+              name: frontend
+              securityContext:
+                privileged: true
+                allowPrivilegeEscalation: false
+                runAsNonRoot: false
+                capabilities:
+                  add: ["NET_ADMIN", "SYS_TIME"]
+              resources:
+                requests:
+                  memory: "128Mi"
+                  cpu: "500m"
+                limits:
+                  memory: "128Mi"
+
+            volumes:
+                - name: config-volume
+                  configMap:
+                    name: app-config
+
+

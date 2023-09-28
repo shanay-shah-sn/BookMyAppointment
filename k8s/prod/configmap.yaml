@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: app-config
+data:
+    region: eu-central-1
+
+    # Ensure at least 5 running replicas of the application in the event that some replica fails.
+    # Autoscale based on the amount of CPU load the node is experiencing.
+    replicas: 1
+
+    image:
+      # CIS Control: Only Allow Access to Authorized Cloud Storage or Email Providers
+      registry: k8s.servicenow.io
+      repository: bookmyapp
+      tag: dev
+      pullPolicy: Always
+
+    type: NodePort
+    port: 80
+    targetPort: 8080
+    # Ensure approved ports and protocol for external traffic
+    nodePort: 8080

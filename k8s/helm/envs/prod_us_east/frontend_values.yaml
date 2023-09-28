@@ -19,10 +19,4 @@ service:
   # Ensure approved ports and protocol for external traffic
   nodePort: 8080
 
-resources: 
-  limits:
-    cpu: 100m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 256Mi
+
