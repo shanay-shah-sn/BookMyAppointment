@@ -50,7 +50,28 @@ pipeline {
                         }
                     }   
                 }
-                
+
+                stage('Config') {
+                    stages('Config Steps') {
+                        stage ("Upload") {
+                            steps {
+                                script {
+                                    changeSetResults = snDevOpsConfig(
+                                         applicationName: 'BookMyAppointment',
+                                         target: 'deployable',
+                                         deployableName: 'Production_US_EAST',
+                                         namePath: 'k8s_config',
+                                         configFile: 'k8s/prod/*',
+                                         dataFormat: 'yaml',
+                                         autoCommit: 'true',
+                                         autoValidate: 'true',
+                                         autoPublish: 'true'
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }                    
 
