@@ -60,7 +60,7 @@ pipeline {
                                          applicationName: 'BookMyAppointment',
                                          target: 'deployable',
                                          deployableName: 'Production_US_EAST',
-                                         namePath: 'helm-charts',
+                                         namePath: 'k8s_config',
                                          configFile: 'k8s/prod/*',
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
