@@ -61,7 +61,7 @@ pipeline {
                                          target: 'deployable',
                                          deployableName: 'Production_US_EAST',
                                          namePath: 'helm-charts',
-                                         configFile: 'k8s/helm/envs/prod_us_east/*',
+                                         configFile: 'k8s/prod/*',
                                          dataFormat: 'yaml',
                                          autoCommit: 'true',
                                          autoValidate: 'true',
