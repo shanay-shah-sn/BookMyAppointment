@@ -11,7 +11,7 @@ data:
 
     image:
       # CIS Control: Only Allow Access to Authorized Cloud Storage or Email Providers
-      registry: k8s.servicenow.io1
+      registry: k8s.servicenow.io
       repository: bookmyapp
       tag: dev
       pullPolicy: Always
