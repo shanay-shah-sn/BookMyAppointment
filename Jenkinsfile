@@ -58,7 +58,7 @@ pipeline {
                                 script {
                                     changeSetResults = snDevOpsConfig(
                                          applicationName: 'BookMyAppointment',
-                                         target: 'component',
+                                         target: 'deployable',
                                          deployableName: 'Production_US_EAST',
                                          namePath: 'helmchart',
                                          configFile: 'k8s/helm/envs/prod_us_east/*',
